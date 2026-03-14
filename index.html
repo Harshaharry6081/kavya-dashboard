@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kavya's Vibe Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #fdf6ed;
+      --warm-white: #fffaf4;
+      --amber: #e8843a;
+      --amber-light: #f5a661;
+      --ferrari-red: #dc2626;
+      --ferrari-light: #fee2e2;
+      --sage: #6b7c5e;
+      --sage-light: #ecf0e8;
+      --text-dark: #1c1917;
+      --text-mid: #57534e;
+      --text-soft: #a8a29e;
+      --border: rgba(0,0,0,0.08);
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 56px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .greeting-tag {
+      display: inline-block;
+      background: var(--amber);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      line-height: 1.1;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    header h1 span {
+      color: var(--amber);
+    }
+
+    header p {
+      color: var(--text-soft);
+      font-size: 15px;
+      font-weight: 300;
+    }
+
+    /* Date line */
+    .date-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .date-bar .dot { width: 4px; height: 4px; background: var(--amber-light); border-radius: 50%; }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    /* Card base */
+    .card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+
+    /* Coffee Card */
+    .card-coffee {
+      grid-column: span 5;
+      background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
+      color: white;
+    }
+
+    .card-coffee .card-label { color: rgba(255,255,255,0.5); }
+
+    .coffee-status {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .coffee-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 8px;
+      animation: steam 3s ease-in-out infinite;
+    }
+
+    @keyframes steam {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+
+    .coffee-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+    }
+
+    /* F1 Card */
+    .card-f1 {
+      grid-column: span 7;
+      background: linear-gradient(135deg, #fff1f1 0%, #ffe4e4 100%);
+      border-color: #fecaca;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-f1::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      width: 140px;
+      height: 140px;
+      background: var(--ferrari-red);
+      opacity: 0.06;
+      border-radius: 50%;
+    }
+
+    .f1-team {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--ferrari-red);
+      margin-bottom: 4px;
+    }
+
+    .f1-sub {
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+    }
+
+    .race-countdown {
+      display: flex;
+      gap: 12px;
+    }
+
+    .count-box {
+      background: var(--ferrari-red);
+      color: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-align: center;
+      min-width: 56px;
+    }
+
+    .count-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      line-height: 1;
+      display: block;
+    }
+
+    .count-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .f1-flag {
+      font-size: 1.5rem;
+      position: absolute;
+      right: 28px;
+      bottom: 24px;
+    }
+
+    /* Mood Card */
+    .card-mood {
+      grid-column: span 7;
+    }
+
+    .mood-display {
+      background: var(--sage-light);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 16px 0;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+    }
+
+    .mood-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--sage);
+      text-align: center;
+      font-style: italic;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      color: white;
+    }
+
+    .btn-amber:hover {
+      background: #d4722e;
+      transform: scale(1.03);
+    }
+
+    .btn-sage {
+      background: var(--sage);
+      color: white;
+    }
+
+    .btn-sage:hover {
+      background: #5a6a4e;
+      transform: scale(1.03);
+    }
+
+    /* Music Card */
+    .card-music {
+      grid-column: span 5;
+      background: linear-gradient(160deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+    }
+
+    .card-music .card-label { color: rgba(255,255,255,0.4); }
+
+    .music-note {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 10px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .music-song {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .music-artist {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 18px;
+    }
+
+    .progress-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--amber-light);
+      border-radius: 10px;
+      animation: playProgress 20s linear infinite;
+    }
+
+    @keyframes playProgress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    /* Book Card */
+    .card-book {
+      grid-column: span 5;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8ecff 100%);
+      border-color: #dde2ff;
+    }
+
+    .book-icon {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .book-quote {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #3730a3;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .book-sub {
+      font-size: 12px;
+      color: #6366f1;
+    }
+
+    /* Quote Card */
+    .card-quote {
+      grid-column: span 7;
+      background: var(--warm-white);
+    }
+
+    .big-quote {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3.5rem;
+      color: var(--amber-light);
+      line-height: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .quote-refresh {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--text-soft);
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      padding: 7px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quote-refresh:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* Easter Egg */
+    .card-easter {
+      grid-column: span 12;
+      text-align: center;
+      background: linear-gradient(135deg, #fff9f0, #fff3e0);
+      border: 1.5px dashed var(--amber-light);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .easter-hint {
+      font-size: 12px;
+      color: var(--text-soft);
+      letter-spacing: 0.05em;
+    }
+
+    .easter-reveal {
+      display: none;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .easter-reveal.show { display: block; }
+
+    .easter-big {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+
+    .easter-msg {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+    .card:nth-child(5) { animation-delay: 0.45s; }
+    .card:nth-child(6) { animation-delay: 0.5s; }
+    .card:nth-child(7) { animation-delay: 0.55s; }
+
+    /* Mood shake animation */
+    @keyframes moodSwap {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .mood-refresh { animation: moodSwap 0.4s ease both; }
+
+    /* Responsive */
+    @media (max-width: 680px) {
+      .card-coffee, .card-f1, .card-mood, .card-music, .card-book, .card-quote {
+        grid-column: span 12;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="greeting-tag">✦ Good day</div>
+    <h1>Kavya's <span>Vibe</span> Dashboard</h1>
+    <p>A little corner of the internet, just for the vibe.</p>
+    <div class="date-bar">
+      <span id="currentDate"></span>
+      <span class="dot"></span>
+      <span id="currentTime"></span>
+    </div>
+  </header>
+
+  <!-- Cards Grid -->
+  <div class="grid">
+
+    <!-- Coffee Card -->
+    <div class="card card-coffee">
+      <div class="card-label">☕ Coffee Mode</div>
+      <span class="coffee-icon">☕</span>
+      <div class="coffee-status">Today's Status:<br/>Required.</div>
+      <div class="coffee-sub">Because some mornings just need one.</div>
+    </div>
+
+    <!-- F1 Card -->
+    <div class="card card-f1">
+      <div class="card-label">🏎 F1 Corner</div>
+      <div class="f1-team">Scuderia Ferrari</div>
+      <div class="f1-sub">Always and forever ❤️</div>
+      <div class="race-countdown" id="countdown">
+        <div class="count-box"><span class="count-num" id="d-days">–</span><span class="count-label">Days</span></div>
+        <div class="count-box"><span class="count-num" id="d-hours">–</span><span class="count-label">Hrs</span></div>
+        <div class="count-box"><span class="count-num" id="d-mins">–</span><span class="count-label">Min</span></div>
+      </div>
+      <span class="f1-flag">🏁</span>
+    </div>
+
+    <!-- Mood Card -->
+    <div class="card card-mood">
+      <div class="card-label">🌤 Daily Mood Generator</div>
+      <div class="mood-display">
+        <div class="mood-text" id="moodText">Press the button to reveal today's vibe ✨</div>
+      </div>
+      <button class="btn btn-amber" onclick="generateMood()">✦ Generate Kavya Mood</button>
+    </div>
+
+    <!-- Music Card -->
+    <div class="card card-music">
+      <div class="card-label">🎧 Music Suggestion</div>
+      <span class="music-note">♪</span>
+      <div class="music-song" id="songTitle">Tu Hi Meri Shab Hai</div>
+      <div class="music-artist" id="songArtist">KK</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <button class="btn btn-sage" onclick="shuffleSong()" style="font-size:13px; padding:10px 18px;">↻ Shuffle Song</button>
+    </div>
+
+    <!-- Book Card -->
+    <div class="card card-book">
+      <div class="card-label">📖 Reading Corner</div>
+      <span class="book-icon">📖</span>
+      <div class="book-quote" id="bookQuote">"One chapter is enough."</div>
+      <div class="book-sub">Your daily reading reminder 🌿</div>
+    </div>
+
+    <!-- Quote Card -->
+    <div class="card card-quote">
+      <div class="card-label">💬 Today's Thought</div>
+      <div class="big-quote">"</div>
+      <div class="quote-text" id="quoteText">Rest is not laziness — it is the space where good ideas find you.</div>
+      <button class="quote-refresh" onclick="refreshQuote()">↻ New thought</button>
+    </div>
+
+    <!-- Easter Egg Card -->
+    <div class="card card-easter" id="easterCard" onclick="revealEaster()">
+      <div id="easterHint" class="easter-hint">✦ &nbsp; There might be a hidden message somewhere around here &nbsp; ✦</div>
+      <div id="easterReveal" class="easter-reveal">
+        <div class="easter-big">Hello, Kavya 👋</div>
+        <div class="easter-msg">
+          This dashboard was built with good intentions and a little curiosity.<br/>
+          Hope your day is as calm as a slow morning with a warm cup. ☕
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // --- Date & Time ---
+  function updateTime() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('currentDate').textContent = dateStr;
+    document.getElementById('currentTime').textContent = timeStr;
+  }
+  updateTime();
+  setInterval(updateTime, 60000);
+
+  // --- F1 Race Countdown (next race: Bahrain GP March 20, 2026 approx) ---
+  function updateCountdown() {
+    const raceDate = new Date('2026-03-20T15:00:00+03:00'); // Bahrain local time
+    const now = new Date();
+    const diff = raceDate - now;
+    if (diff > 0) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      document.getElementById('d-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('d-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('d-mins').textContent = String(mins).padStart(2, '0');
+    } else {
+      document.getElementById('d-days').textContent = '🏁';
+      document.getElementById('d-hours').textContent = '0';
+      document.getElementById('d-mins').textContent = '0';
+    }
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+  // --- Mood Generator ---
+  const moods = [
+    "Chill day 🌿",
+    "Coffee + Deep Focus ☕",
+    "Take it slow today 🌤",
+    "Cozy reading mode 📖",
+    "Quiet & Productive 🤍",
+    "Low effort, high vibes ✨",
+    "Music on, world off 🎧",
+    "Good things are coming 🌸",
+    "Do one thing well today 🎯",
+    "Grateful and grounded 🍃",
+    "Let the day unfold 🌅",
+    "Soft day, warm heart ☀️"
+  ];
+
+  function generateMood() {
+    const el = document.getElementById('moodText');
+    const picked = moods[Math.floor(Math.random() * moods.length)];
+    el.textContent = picked;
+    el.classList.remove('mood-refresh');
+    void el.offsetWidth;
+    el.classList.add('mood-refresh');
+  }
+
+  // --- Music Shuffle ---
+  const songs = [
+    { title: "Tu Hi Meri Shab Hai", artist: "KK" },
+    { title: "Tum Se Hi", artist: "Mohit Chauhan" },
+    { title: "Channa Mereya", artist: "Arijit Singh" },
+    { title: "Agar Tum Saath Ho", artist: "Arijit Singh & Alka Yagnik" },
+    { title: "Phir Le Aya Dil", artist: "Arijit Singh" },
+    { title: "Raabta", artist: "Arijit Singh" },
+    { title: "Ae Dil Hai Mushkil", artist: "Arijit Singh" },
+    { title: "Tujh Mein Rab Dikhta Hai", artist: "Roop Kumar Rathod" },
+    { title: "Moh Moh Ke Dhaage", artist: "Papon & Monali Thakur" },
+    { title: "Kabira", artist: "Tochi Raina & Rekha Bhardwaj" }
+  ];
+
+  function shuffleSong() {
+    const s = songs[Math.floor(Math.random() * songs.length)];
+    document.getElementById('songTitle').textContent = s.title;
+    document.getElementById('songArtist').textContent = s.artist;
+    // Reset progress bar
+    const bar = document.getElementById('progressFill');
+    bar.style.animation = 'none';
+    void bar.offsetWidth;
+    bar.style.animation = 'playProgress 20s linear infinite';
+  }
+
+  // --- Quote Refresh ---
+  const quotes = [
+    "Rest is not laziness — it is the space where good ideas find you.",
+    "Slow mornings are their own kind of luxury.",
+    "Some days, simply being kind to yourself is enough.",
+    "Not all progress is loud. Quiet growth counts too.",
+    "The best chapters start with a deep breath.",
+    "You don't need to explain your pace to anyone.",
+    "There is beauty in the ordinary, if you slow down enough to see it.",
+    "Do less, feel more.",
+    "One good cup of coffee and a book — that's a perfect morning.",
+    "It's okay to have a soft, gentle day."
+  ];
+
+  let lastQuote = 0;
+  function refreshQuote() {
+    let idx;
+    do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuote);
+    lastQuote = idx;
+    const el = document.getElementById('quoteText');
+    el.style.opacity = 0;
+    setTimeout(() => {
+      el.textContent = quotes[idx];
+      el.style.transition = 'opacity 0.4s';
+      el.style.opacity = 1;
+    }, 200);
+  }
+
+  // --- Easter Egg ---
+  function revealEaster() {
+    const hint = document.getElementById('easterHint');
+    const reveal = document.getElementById('easterReveal');
+    hint.style.display = 'none';
+    reveal.classList.add('show');
+    document.getElementById('easterCard').style.cursor = 'default';
+    document.getElementById('easterCard').onclick = null;
+  }
+</script>
+</body>
+</html>
