@@ -1,19 +1,20 @@
 .page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 48px 24px 80px;
+  padding: 40px 24px 80px;
 }
 
-/* Hero */
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-  margin-bottom: 48px;
+/* Dashboard Header */
+.dashHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-.heroTag {
+.dashTag {
   display: inline-block;
   background: var(--amber);
   color: white;
@@ -23,24 +24,22 @@
   text-transform: uppercase;
   padding: 5px 14px;
   border-radius: 100px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
-.heroTitle {
+.dashTitle {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   line-height: 1.1;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
-.heroTitle em { color: var(--amber); font-style: italic; }
+.dashTitle em { color: var(--amber); font-style: italic; }
 
-.heroSub {
-  font-size: 15px;
+.dashSub {
+  font-size: 14px;
   color: var(--text-soft);
   font-weight: 300;
-  margin-bottom: 24px;
-  line-height: 1.6;
 }
 
 .heroBtn {
@@ -52,46 +51,55 @@
   font-weight: 600;
   font-size: 14px;
   transition: all 0.2s;
+  white-space: nowrap;
 }
-
 .heroBtn:hover { background: #d4722e; transform: scale(1.03); }
 
-.heroQuote {
-  background: var(--warm-white);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 28px;
-  box-shadow: var(--shadow);
+/* Tabs */
+.tabBar {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
 }
 
-.quoteIcon {
-  font-family: 'DM Serif Display', serif;
-  font-size: 3rem;
-  color: var(--amber);
-  line-height: 0.8;
-  margin-bottom: 8px;
-}
-
-.quoteText {
-  font-family: 'DM Serif Display', serif;
-  font-style: italic;
-  font-size: 1rem;
-  color: var(--text-mid);
-  line-height: 1.65;
-  margin-bottom: 12px;
-}
-
-.quoteAuthor {
-  font-size: 12px;
+.tab {
+  background: none;
+  border: none;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-soft);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.2s;
 }
 
-/* Stats */
+.tab:hover { color: var(--amber); background: var(--warm-white); }
+
+.tabActive {
+  color: var(--amber) !important;
+  border-bottom-color: var(--amber) !important;
+  font-weight: 600;
+}
+
+.tabContent {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats Row */
 .statsRow {
   display: grid;
-  grid-template-columns: repeat(6,1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 12px;
-  margin-bottom: 36px;
+  margin-bottom: 28px;
 }
 
 .statCard {
@@ -103,9 +111,7 @@
   box-shadow: var(--shadow);
   transition: transform 0.2s;
 }
-
 .statCard:hover { transform: translateY(-2px); }
-
 .statIcon { font-size: 1.4rem; margin-bottom: 6px; }
 .statValue {
   font-family: 'DM Serif Display', serif;
@@ -116,19 +122,81 @@
 }
 .statLabel { font-size: 11px; color: var(--text-soft); letter-spacing: 0.04em; }
 
-/* Shelf Cards */
+/* Quote */
+.quoteCard {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--amber);
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
+}
+.quoteIcon {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.4rem;
+  color: var(--amber);
+  line-height: 0.8;
+  margin-bottom: 6px;
+}
+.quoteText {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.quoteAuthor { font-size: 12px; color: var(--text-soft); }
+
+/* Sections */
+.section { margin-bottom: 36px; }
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sectionTitle {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+}
+
+.sectionLink {
+  font-size: 13px;
+  color: var(--amber);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.sectionLink:hover { color: #d4722e; }
+
+.compactList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Book Shelf Tab */
+.shelfIntro {
+  font-size: 14px;
+  color: var(--text-soft);
+  margin-bottom: 20px;
+}
+
 .shelvesGrid {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 14px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
 }
 
 .shelfCard {
   background: var(--shelf-bg);
   border: 1.5px solid var(--shelf-color, var(--border));
   border-radius: 18px;
-  padding: 22px 18px;
+  padding: 24px 18px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -136,9 +204,7 @@
   position: relative;
   overflow: hidden;
 }
-
 .shelfCard:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-
 .shelfIcon { font-size: 1.8rem; margin-bottom: 6px; }
 .shelfLabel {
   font-family: 'DM Serif Display', serif;
@@ -157,35 +223,6 @@
 }
 .shelfCard:hover .shelfArrow { opacity: 1; transform: translateY(-50%) translateX(4px); }
 
-/* Sections */
-.section { margin-bottom: 40px; }
-
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.sectionTitle {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.3rem;
-}
-
-.sectionLink {
-  font-size: 13px;
-  color: var(--amber);
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.sectionLink:hover { color: #d4722e; }
-
-.compactList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 /* Empty */
 .empty {
   text-align: center;
@@ -199,14 +236,13 @@
 }
 .emptySub { color: var(--text-soft); font-size: 14px; }
 
-@media (max-width:900px) {
-  .hero { grid-template-columns: 1fr; }
-  .heroQuote { display: none; }
-  .statsRow { grid-template-columns: repeat(3,1fr); }
-  .shelvesGrid { grid-template-columns: repeat(2,1fr); }
+@media (max-width: 900px) {
+  .statsRow { grid-template-columns: repeat(3, 1fr); }
+  .shelvesGrid { grid-template-columns: repeat(2, 1fr); }
+  .dashHeader { flex-direction: column; align-items: flex-start; }
 }
 
-@media (max-width:540px) {
-  .statsRow { grid-template-columns: repeat(2,1fr); }
+@media (max-width: 540px) {
+  .statsRow { grid-template-columns: repeat(2, 1fr); }
   .shelvesGrid { grid-template-columns: 1fr 1fr; }
 }

@@ -59,11 +59,22 @@
   color: white !important;
 }
 
+.homeLink {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-soft);
+  padding: 6px 14px;
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+.homeLink:hover { color: var(--amber); background: var(--cream); }
+
 .actions {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .addBtn {
