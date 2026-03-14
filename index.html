@@ -1132,9 +1132,259 @@
       .planner-input-row { flex-wrap: wrap; }
       .planner-time-input { width: 100%; }
     }
+    /* ── DARK / LIGHT MODE ─── */
+    :root {
+      --cream: #fdf6ed;
+      --warm-white: #fffaf4;
+      --text-dark: #1c1917;
+      --text-mid: #57534e;
+      --text-soft: #a8a29e;
+      --border: rgba(0,0,0,0.08);
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+    }
+    body.dark-mode {
+      --cream: #0f0e0d;
+      --warm-white: #1a1816;
+      --text-dark: #f5f0e8;
+      --text-mid: #c4b8a8;
+      --text-soft: #786f65;
+      --border: rgba(255,255,255,0.08);
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+      --shadow-hover: 0 8px 40px rgba(0,0,0,0.5);
+      background: var(--cream);
+    }
+    body.dark-mode .card { background: var(--warm-white); border-color: var(--border); }
+    body.dark-mode .card-coffee { background: linear-gradient(135deg,#1a0e08 0%,#2d1a0e 100%); }
+    body.dark-mode .card-f1 { background: linear-gradient(135deg,#1f0a0a 0%,#2d1010 100%); }
+    body.dark-mode .card-book { background: linear-gradient(135deg,#0e1020 0%,#141828 100%); }
+    body.dark-mode .mood-display { background: rgba(107,124,94,0.15); }
+    body.dark-mode .slot { background: rgba(255,255,255,0.04); }
+    body.dark-mode .planner-input, body.dark-mode .planner-time-input,
+    body.dark-mode .priority-select, body.dark-mode .due-date-input { background: rgba(255,255,255,0.06); color: var(--text-dark); border-color: var(--border); }
+    body.dark-mode .stat-chip { background: rgba(255,255,255,0.05); }
+    body.dark-mode .filter-btn { background: rgba(255,255,255,0.05); color: var(--text-soft); }
+    body.dark-mode .quote-refresh { color: var(--text-soft); border-color: var(--border); }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px; right: 20px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--warm-white);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.3s;
+      z-index: 999;
+    }
+    .theme-toggle:hover { transform: scale(1.1); }
+
+    /* ── CONFETTI ─── */
+    .confetti-piece {
+      position: fixed;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: confettiFall 2.5s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ── WEATHER CARD ─── */
+    .card-weather {
+      grid-column: span 4;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-weather::before {
+      content: '';
+      position: absolute;
+      right: -30px; top: -30px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .card-weather .card-label { color: rgba(255,255,255,0.6); }
+    .weather-temp {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .weather-desc { font-size: 14px; opacity: 0.85; margin-bottom: 8px; }
+    .weather-city { font-size: 12px; opacity: 0.6; }
+    .weather-icon { font-size: 3rem; position: absolute; right: 24px; top: 24px; }
+    .weather-details {
+      display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .weather-detail { font-size: 12px; opacity: 0.75; }
+
+    /* ── NOTE CARD ─── */
+    .card-note {
+      grid-column: span 8;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-color: #fcd34d;
+      position: relative;
+    }
+    .card-note .card-label { color: #92400e; }
+    .note-from {
+      font-size: 11px;
+      color: #92400e;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+    .note-display {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #78350f;
+      line-height: 1.65;
+      min-height: 60px;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+    }
+    .note-empty { color: #b45309; font-style: italic; font-size: 0.95rem; }
+    .note-input-area {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .note-input-area.open { display: flex; }
+    .note-textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid #fcd34d;
+      background: rgba(255,255,255,0.6);
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #78350f;
+      resize: none;
+      outline: none;
+      min-height: 80px;
+    }
+    .note-textarea:focus { border-color: #f59e0b; }
+    .note-actions { display: flex; gap: 8px; }
+    .btn-note-save {
+      background: #f59e0b; color: white; border: none;
+      padding: 9px 18px; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-note-save:hover { background: #d97706; }
+    .btn-note-cancel {
+      background: rgba(0,0,0,0.08); color: #78350f; border: none;
+      padding: 9px 18px; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .note-meta { font-size: 11px; color: #b45309; margin-top: 4px; }
+    .note-edit-btn {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(0,0,0,0.08); border: none;
+      border-radius: 100px; padding: 5px 12px;
+      font-size: 11px; color: #92400e; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .note-edit-btn:hover { background: rgba(0,0,0,0.15); }
+
+    /* ── DRAWING CANVAS ─── */
+    .drawing-wrapper {
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 8px;
+    }
+    .drawing-toolbar {
+      display: flex; gap: 10px; align-items: center;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .color-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%; border: 3px solid transparent;
+      cursor: pointer; transition: transform 0.15s;
+    }
+    .color-btn.active { border-color: white; transform: scale(1.2); }
+    .size-slider {
+      -webkit-appearance: none;
+      width: 100px; height: 4px;
+      border-radius: 4px; background: rgba(255,255,255,0.3);
+      outline: none; cursor: pointer;
+    }
+    .size-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 50%; background: var(--amber);
+      cursor: pointer;
+    }
+    #drawCanvas {
+      border-radius: 12px;
+      background: white;
+      display: block;
+      width: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    .draw-label { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+    /* ── DICE ROLL ─── */
+    .dice-wrapper { text-align: center; padding: 10px 0; }
+    .dice-display {
+      display: flex; gap: 20px; justify-content: center;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .dice-player { text-align: center; }
+    .dice-name { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .dice-face {
+      width: 80px; height: 80px;
+      background: white;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem;
+      margin: 0 auto 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.15s;
+    }
+    .dice-face.rolling { animation: diceRoll 0.5s ease; }
+    @keyframes diceRoll {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      25%  { transform: scale(1.2) rotate(-15deg); }
+      75%  { transform: scale(1.2) rotate(15deg); }
+    }
+    .dice-score { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .dice-result {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      min-height: 30px;
+      color: rgba(255,255,255,0.9);
+    }
+    .dice-totals {
+      display: flex; gap: 16px; justify-content: center;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .dice-total-chip {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 6px 16px;
+      font-size: 13px; color: rgba(255,255,255,0.7);
+    }
   </style>
 </head>
 <body>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode" id="themeBtn">🌙</button>
+
 <div class="container">
 
   <!-- Header -->
@@ -1325,6 +1575,8 @@
         <button class="game-tab active" onclick="switchGame('ttt', this)">⭕ Tic Tac Toe</button>
         <button class="game-tab" onclick="switchGame('word', this)">📝 Word Guess</button>
         <button class="game-tab" onclick="switchGame('memory', this)">🃏 Memory Cards</button>
+        <button class="game-tab" onclick="switchGame('draw', this)">🎨 Draw Together</button>
+        <button class="game-tab" onclick="switchGame('dice', this)">🎲 Dice Battle</button>
       </div>
 
       <!-- TIC TAC TOE -->
@@ -1381,6 +1633,85 @@
           </div>
         </div>
       </div>
+
+      <!-- DRAW TOGETHER -->
+      <div class="game-panel" id="panel-draw">
+        <div class="drawing-wrapper">
+          <div class="drawing-toolbar">
+            <span class="draw-label">Color:</span>
+            <div class="color-btn active" style="background:#e8843a" onclick="setDrawColor('#e8843a',this)"></div>
+            <div class="color-btn" style="background:#ef4444" onclick="setDrawColor('#ef4444',this)"></div>
+            <div class="color-btn" style="background:#3b82f6" onclick="setDrawColor('#3b82f6',this)"></div>
+            <div class="color-btn" style="background:#22c55e" onclick="setDrawColor('#22c55e',this)"></div>
+            <div class="color-btn" style="background:#a855f7" onclick="setDrawColor('#a855f7',this)"></div>
+            <div class="color-btn" style="background:#1c1917" onclick="setDrawColor('#1c1917',this)"></div>
+            <div class="color-btn" style="background:#ffffff;border:2px solid rgba(255,255,255,0.3)" onclick="setDrawColor('#ffffff',this)"></div>
+            <span class="draw-label" style="margin-left:6px;">Size:</span>
+            <input class="size-slider" type="range" min="2" max="20" value="4" id="brushSize"/>
+            <button class="btn btn-ghost" style="font-size:12px;padding:7px 14px;" onclick="clearCanvas()">🗑 Clear</button>
+          </div>
+          <canvas id="drawCanvas" height="360"></canvas>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:8px;text-align:center;">
+            Both players draw on the same canvas in real-time 🎨
+          </div>
+        </div>
+      </div>
+
+      <!-- DICE BATTLE -->
+      <div class="game-panel" id="panel-dice">
+        <div class="dice-wrapper">
+          <div class="dice-result" id="dice-result">Join a room and roll! 🎲</div>
+          <div class="dice-display">
+            <div class="dice-player">
+              <div class="dice-name" id="dice-name-me">You</div>
+              <div class="dice-face" id="dice-me">🎲</div>
+              <div class="dice-score">Wins: <strong id="dice-wins-me">0</strong></div>
+            </div>
+            <div style="display:flex;align-items:center;font-size:1.5rem;color:rgba(255,255,255,0.3)">VS</div>
+            <div class="dice-player">
+              <div class="dice-name" id="dice-name-opp">Opponent</div>
+              <div class="dice-face" id="dice-opp">🎲</div>
+              <div class="dice-score">Wins: <strong id="dice-wins-opp">0</strong></div>
+            </div>
+          </div>
+          <div class="game-controls">
+            <button class="btn btn-amber" onclick="rollDice()">🎲 Roll!</button>
+            <button class="btn btn-ghost" onclick="resetDice()">↺ Reset Score</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weather Card -->
+    <div class="card card-weather">
+      <div class="card-label">🌦 Weather</div>
+      <div class="weather-icon" id="weatherIcon">⛅</div>
+      <div class="weather-temp" id="weatherTemp">--°</div>
+      <div class="weather-desc" id="weatherDesc">Loading...</div>
+      <div class="weather-city" id="weatherCity">Fetching location...</div>
+      <div class="weather-details">
+        <div class="weather-detail">💧 <span id="weatherHumidity">--</span>%</div>
+        <div class="weather-detail">🌬 <span id="weatherWind">--</span> km/h</div>
+        <div class="weather-detail">🌡 Feels <span id="weatherFeels">--</span>°</div>
+      </div>
+    </div>
+
+    <!-- Note Card -->
+    <div class="card card-note">
+      <div class="card-label">💌 Leave a Note</div>
+      <button class="note-edit-btn" id="noteEditBtn" onclick="toggleNoteEdit()">✏️ Write</button>
+      <div class="note-from" id="noteFrom"></div>
+      <div class="note-display" id="noteDisplay">
+        <span class="note-empty">No note yet... leave a surprise message 💛</span>
+      </div>
+      <div class="note-input-area" id="noteInputArea">
+        <textarea class="note-textarea" id="noteTextarea" placeholder="Write something nice..." rows="3"></textarea>
+        <div class="note-actions">
+          <button class="btn-note-save" onclick="saveNote()">💛 Send Note</button>
+          <button class="btn-note-cancel" onclick="toggleNoteEdit()">Cancel</button>
+        </div>
+      </div>
+      <div class="note-meta" id="noteMeta"></div>
     </div>
 
     <!-- Easter Egg Card -->
@@ -1503,6 +1834,69 @@
     document.getElementById('easterCard').style.cursor = 'default';
     document.getElementById('easterCard').onclick = null;
   }
+
+  // --- Dark / Light Mode ---
+  function toggleTheme() {
+    const dark = document.body.classList.toggle('dark-mode');
+    document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('kavya-theme', dark ? 'dark' : 'light');
+  }
+  if (localStorage.getItem('kavya-theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+
+  // --- Confetti ---
+  function launchConfetti() {
+    const colors = ['#e8843a','#f5a661','#dc2626','#22c55e','#3b82f6','#a855f7','#fcd34d'];
+    for (let i = 0; i < 80; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left: ${Math.random()*100}vw;
+        top: -10px;
+        background: ${colors[Math.floor(Math.random()*colors.length)]};
+        width: ${6+Math.random()*8}px;
+        height: ${6+Math.random()*8}px;
+        border-radius: ${Math.random()>0.5?'50%':'2px'};
+        animation-delay: ${Math.random()*1.5}s;
+        animation-duration: ${2+Math.random()}s;
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+  }
+  window._launchConfetti = launchConfetti;
+
+  // --- Weather (Open-Meteo, free no API key) ---
+  function loadWeather() {
+    if (!navigator.geolocation) { document.getElementById('weatherDesc').textContent = 'Location unavailable'; return; }
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code`)
+        .then(r => r.json()).then(d => {
+          const c = d.current;
+          const icons = {0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',61:'🌧',71:'❄️',80:'🌧',95:'⛈'};
+          const descs = {0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',61:'Rain',71:'Snow',80:'Showers',95:'Thunderstorm'};
+          const code  = c.weather_code;
+          const icon  = icons[code] || '🌤';
+          const desc  = descs[code] || 'Clear';
+          document.getElementById('weatherIcon').textContent = icon;
+          document.getElementById('weatherTemp').textContent = `${Math.round(c.temperature_2m)}°C`;
+          document.getElementById('weatherDesc').textContent = desc;
+          document.getElementById('weatherHumidity').textContent = c.relative_humidity_2m;
+          document.getElementById('weatherWind').textContent = Math.round(c.wind_speed_10m);
+          document.getElementById('weatherFeels').textContent = Math.round(c.apparent_temperature) + '°C';
+          // Reverse geocode city
+          fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+            .then(r=>r.json()).then(g => {
+              const city = g.address?.city || g.address?.town || g.address?.village || 'Your Location';
+              document.getElementById('weatherCity').textContent = `📍 ${city}`;
+            }).catch(()=>{});
+        }).catch(()=>{ document.getElementById('weatherDesc').textContent='Unable to fetch weather'; });
+    }, ()=>{ document.getElementById('weatherDesc').textContent='Allow location for weather'; document.getElementById('weatherCity').textContent=''; });
+  }
+  loadWeather();
 </script>
 
 <!-- Firebase Day Planner -->
@@ -2003,6 +2397,221 @@
         }
       });
     });
+  };
+</script>
+<!-- Note + Drawing + Dice Firebase Module -->
+<script type="module">
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, get, onValue, update, push, remove }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const cfg = {
+    apiKey:"AIzaSyA6X4vizsAdynQRGAIE-u-WX3gB3tI9V-U",
+    authDomain:"kavya-dashboard-143.firebaseapp.com",
+    databaseURL:"https://kavya-dashboard-143-default-rtdb.firebaseio.com",
+    projectId:"kavya-dashboard-143",
+    storageBucket:"kavya-dashboard-143.firebasestorage.app",
+    messagingSenderId:"742321607167",
+    appId:"1:742321607167:web:34c2ea73ff43e983cad7ca"
+  };
+  const app2 = getApps().find(a=>a.name==='extras') || initializeApp(cfg,'extras');
+  const db2  = getDatabase(app2);
+
+  /* ── NOTE ─────────────────────────────────── */
+  const noteRef = ref(db2, 'note/latest');
+
+  onValue(noteRef, snap => {
+    const d = snap.val();
+    const display = document.getElementById('noteDisplay');
+    const meta    = document.getElementById('noteMeta');
+    const from    = document.getElementById('noteFrom');
+    if (d && d.text) {
+      display.textContent = d.text;
+      display.style.fontStyle = 'italic';
+      from.textContent = d.from ? `From ${d.from} 💛` : '';
+      meta.textContent = d.time || '';
+    } else {
+      display.innerHTML = '<span class="note-empty">No note yet... leave a surprise message 💛</span>';
+      from.textContent = '';
+      meta.textContent = '';
+    }
+  });
+
+  window.toggleNoteEdit = function() {
+    const area = document.getElementById('noteInputArea');
+    area.classList.toggle('open');
+  };
+
+  window.saveNote = function() {
+    const text = document.getElementById('noteTextarea').value.trim();
+    if (!text) return;
+    const now  = new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+    set(noteRef, { text, from: 'Someone who cares 💛', time: now });
+    document.getElementById('noteTextarea').value = '';
+    document.getElementById('noteInputArea').classList.remove('open');
+  };
+
+  /* ── CONFETTI on task completion ─────────── */
+  // Watch progress and fire confetti when 100%
+  const todayKey = new Date().toISOString().split('T')[0];
+  onValue(ref(db2, `planner/${todayKey}`), snap => {
+    const tasks = snap.val();
+    if (!tasks) return;
+    const all  = Object.values(tasks);
+    const done = all.filter(t=>t.done).length;
+    if (all.length > 0 && done === all.length) {
+      window._launchConfetti && window._launchConfetti();
+    }
+  });
+
+  /* ── DRAWING CANVAS ──────────────────────── */
+  const canvas  = document.getElementById('drawCanvas');
+  const ctx     = canvas.getContext('2d');
+  let drawing   = false;
+  let drawColor = '#e8843a';
+  let brushSz   = 4;
+  let lastX = 0, lastY = 0;
+
+  // Resize canvas to fit container
+  function resizeCanvas() {
+    const w = canvas.parentElement.clientWidth - 32;
+    canvas.width = w;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  window.setDrawColor = function(c, btn) {
+    drawColor = c;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+
+  document.getElementById('brushSize').addEventListener('input', e => { brushSz = e.target.value; });
+
+  // Draw strokes to Firebase
+  const strokesRef = () => roomId ? ref(db2, `games/${roomId}/strokes`) : null;
+  let strokeUnsub  = null;
+
+  function subscribeStrokes() {
+    if (strokeUnsub) strokeUnsub();
+    if (!roomId) return;
+    strokeUnsub = onValue(strokesRef(), snap => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const strokes = snap.val();
+      if (!strokes) return;
+      Object.values(strokes).forEach(s => drawStroke(s));
+    });
+  }
+
+  function drawStroke(s) {
+    ctx.beginPath();
+    ctx.moveTo(s.x0 * canvas.width, s.y0 * canvas.height);
+    ctx.lineTo(s.x1 * canvas.width, s.y1 * canvas.height);
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth   = s.size;
+    ctx.lineCap     = 'round';
+    ctx.stroke();
+  }
+
+  function getPos(e) {
+    const r = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return [(clientX - r.left) / canvas.width, (clientY - r.top) / canvas.height];
+  }
+
+  canvas.addEventListener('mousedown',  e => { drawing=true; [lastX,lastY]=getPos(e); });
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; [lastX,lastY]=getPos(e); });
+  canvas.addEventListener('mouseup',    () => drawing=false);
+  canvas.addEventListener('touchend',   () => drawing=false);
+  canvas.addEventListener('mousemove',  e => handleDraw(e));
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); handleDraw(e); });
+
+  function handleDraw(e) {
+    if (!drawing) return;
+    const [nx, ny] = getPos(e);
+    const stroke   = { x0:lastX, y0:lastY, x1:nx, y1:ny, color:drawColor, size:Number(brushSz) };
+    drawStroke(stroke);
+    if (roomId) push(strokesRef(), stroke);
+    [lastX, lastY] = [nx, ny];
+  }
+
+  window.clearCanvas = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (roomId) set(strokesRef(), null);
+  };
+
+  // Hook into joinRoom to subscribe strokes
+  const _origJoin = window.joinRoom;
+  window.joinRoom = function() {
+    _origJoin();
+    setTimeout(() => { subscribeStrokes(); initDice(); }, 500);
+  };
+
+  /* ── DICE BATTLE ─────────────────────────── */
+  const DICE_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+  let diceUnsub = null;
+
+  function diceRef() { return ref(db2, `games/${roomId}/dice`); }
+
+  function initDice() {
+    if (!roomId) return;
+    if (diceUnsub) diceUnsub();
+    diceUnsub = onValue(diceRef(), snap => {
+      const s = snap.val() || { scores:{host:0,guest:0} };
+      renderDice(s);
+    });
+    get(diceRef()).then(s => {
+      if (!s.exists()) set(diceRef(), { scores:{host:0,guest:0}, lastRoll:null });
+    });
+  }
+
+  function renderDice(s) {
+    const isHost = window.myRole === 'host';
+    const myKey  = isHost ? 'host' : 'guest';
+    const opKey  = isHost ? 'guest' : 'host';
+    const sc     = s.scores || {};
+
+    document.getElementById('dice-name-me').textContent  = window.myName || 'You';
+    document.getElementById('dice-name-opp').textContent = 'Opponent';
+    document.getElementById('dice-wins-me').textContent  = sc[myKey]  || 0;
+    document.getElementById('dice-wins-opp').textContent = sc[opKey] || 0;
+
+    if (s.lastRoll) {
+      document.getElementById('dice-me').textContent  = DICE_FACES[(s.lastRoll[myKey]||1)-1];
+      document.getElementById('dice-opp').textContent = DICE_FACES[(s.lastRoll[opKey]||1)-1];
+      const me = s.lastRoll[myKey], opp = s.lastRoll[opKey];
+      if (me > opp)       document.getElementById('dice-result').textContent = '🎉 You win this round!';
+      else if (opp > me)  document.getElementById('dice-result').textContent = '😅 Opponent wins!';
+      else                document.getElementById('dice-result').textContent = "🤝 It's a tie!";
+    }
+  }
+
+  window.rollDice = function() {
+    if (!roomId) { alert('Join a room first!'); return; }
+    const roll  = Math.ceil(Math.random() * 6);
+    const myKey = window.myRole === 'host' ? 'host' : 'guest';
+    const face  = document.getElementById('dice-me');
+    face.classList.remove('rolling');
+    void face.offsetWidth;
+    face.classList.add('rolling');
+    get(diceRef()).then(snap => {
+      const s      = snap.val() || { scores:{host:0,guest:0}, lastRoll:{} };
+      const lastRoll = { ...(s.lastRoll||{}), [myKey]: roll };
+      const opKey    = myKey === 'host' ? 'guest' : 'host';
+      const scores   = { ...(s.scores||{}) };
+      // Award point if both rolled
+      if (lastRoll.host && lastRoll.guest) {
+        if (lastRoll.host > lastRoll.guest) scores.host = (scores.host||0) + 1;
+        else if (lastRoll.guest > lastRoll.host) scores.guest = (scores.guest||0) + 1;
+      }
+      update(diceRef(), { lastRoll, scores });
+    });
+  };
+
+  window.resetDice = function() {
+    if (!roomId) return;
+    set(diceRef(), { scores:{host:0,guest:0}, lastRoll:null });
   };
 </script>
 </body>
