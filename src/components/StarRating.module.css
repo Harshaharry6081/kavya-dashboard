@@ -1,0 +1,13 @@
+.stars { display: flex; gap: 4px; }
+
+.star {
+  font-size: 1.6rem;
+  color: #d1ccc6;
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s;
+  line-height: 1;
+}
+
+.star:hover { transform: scale(1.2); }
+
+.filled { color: #f59e0b; }

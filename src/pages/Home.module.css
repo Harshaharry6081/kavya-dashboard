@@ -1,0 +1,212 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.heroTag {
+  display: inline-block;
+  background: var(--amber);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.heroTitle em { color: var(--amber); font-style: italic; }
+
+.heroSub {
+  font-size: 15px;
+  color: var(--text-soft);
+  font-weight: 300;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.heroBtn {
+  display: inline-block;
+  background: var(--amber);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.heroBtn:hover { background: #d4722e; transform: scale(1.03); }
+
+.heroQuote {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.quoteIcon {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  color: var(--amber);
+  line-height: 0.8;
+  margin-bottom: 8px;
+}
+
+.quoteText {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.quoteAuthor {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* Stats */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.statCard {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+}
+
+.statCard:hover { transform: translateY(-2px); }
+
+.statIcon { font-size: 1.4rem; margin-bottom: 6px; }
+.statValue {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  color: var(--text-dark);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.statLabel { font-size: 11px; color: var(--text-soft); letter-spacing: 0.04em; }
+
+/* Shelf Cards */
+.shelvesGrid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 14px;
+  margin-bottom: 48px;
+}
+
+.shelfCard {
+  background: var(--shelf-bg);
+  border: 1.5px solid var(--shelf-color, var(--border));
+  border-radius: 18px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.shelfCard:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+
+.shelfIcon { font-size: 1.8rem; margin-bottom: 6px; }
+.shelfLabel {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: var(--shelf-color);
+}
+.shelfCount { font-size: 12px; color: var(--text-soft); }
+.shelfArrow {
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--shelf-color);
+  opacity: 0.4;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.shelfCard:hover .shelfArrow { opacity: 1; transform: translateY(-50%) translateX(4px); }
+
+/* Sections */
+.section { margin-bottom: 40px; }
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+}
+
+.sectionLink {
+  font-size: 13px;
+  color: var(--amber);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.sectionLink:hover { color: #d4722e; }
+
+.compactList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+.emptyIcon { font-size: 3rem; margin-bottom: 12px; }
+.emptyTitle {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+.emptySub { color: var(--text-soft); font-size: 14px; }
+
+@media (max-width:900px) {
+  .hero { grid-template-columns: 1fr; }
+  .heroQuote { display: none; }
+  .statsRow { grid-template-columns: repeat(3,1fr); }
+  .shelvesGrid { grid-template-columns: repeat(2,1fr); }
+}
+
+@media (max-width:540px) {
+  .statsRow { grid-template-columns: repeat(2,1fr); }
+  .shelvesGrid { grid-template-columns: 1fr 1fr; }
+}
