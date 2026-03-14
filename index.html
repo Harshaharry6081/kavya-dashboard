@@ -1389,9 +1389,9 @@
 
   <!-- Header -->
   <header>
-    <div class="greeting-tag">✦ Good day</div>
-    <h1>Kavya's <span>Vibe</span> Dashboard</h1>
-    <p>A little corner of the internet, just for the vibe.</p>
+    <div class="greeting-tag" id="greetingTag">✦ Good day</div>
+    <h1 id="greetingTitle">Kavya's <span>Vibe</span> Dashboard</h1>
+    <p id="greetingSub">A little corner of the internet, just for the vibe.</p>
     <div class="date-bar">
       <span id="currentDate"></span>
       <span class="dot"></span>
@@ -1403,11 +1403,11 @@
   <div class="grid">
 
     <!-- Coffee Card -->
-    <div class="card card-coffee">
-      <div class="card-label">☕ Coffee Mode</div>
-      <span class="coffee-icon">☕</span>
-      <div class="coffee-status">Today's Status:<br/>Required.</div>
-      <div class="coffee-sub">Because some mornings just need one.</div>
+    <div class="card card-coffee" id="coffeeCard">
+      <div class="card-label" id="coffeeLabel">☕ Coffee Mode</div>
+      <span class="coffee-icon" id="coffeeIcon">☕</span>
+      <div class="coffee-status" id="coffeeStatus">Today's Status:<br/>Required.</div>
+      <div class="coffee-sub" id="coffeeSub">Because some mornings just need one.</div>
     </div>
 
     <!-- F1 Card -->
@@ -1730,13 +1730,135 @@
 </div>
 
 <script>
-  // --- Date & Time ---
+  // --- Time-based content config ---
+  const timeSlots = [
+    {
+      range: [0, 4],
+      greeting: '✦ Still up?',
+      title: `Kavya's <span>Night Owl</span> Dashboard`,
+      sub: 'Late nights have their own kind of magic. 🌙',
+      coffeeLabel: '🌙 Night Mode',
+      coffeeIcon: '🌙',
+      coffeeStatus: 'Sleep might be better.<br/>But here you are.',
+      coffeeSub: 'The night is yours. ✨',
+      coffeeBg: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 100%)',
+    },
+    {
+      range: [4, 6],
+      greeting: '✦ Early bird!',
+      title: `Kavya's <span>Dawn</span> Dashboard`,
+      sub: 'The world is quiet. This hour is yours. 🌄',
+      coffeeLabel: '🌄 Dawn Mode',
+      coffeeIcon: '🌄',
+      coffeeStatus: 'First light.<br/>First cup.',
+      coffeeSub: 'You beat the sun today. ☕',
+      coffeeBg: 'linear-gradient(135deg, #1a0a00 0%, #7c3f00 100%)',
+    },
+    {
+      range: [6, 9],
+      greeting: '✦ Good morning',
+      title: `Kavya's <span>Morning</span> Dashboard`,
+      sub: 'Soft light, warm cup, slow start. ☀️',
+      coffeeLabel: '☕ Morning Mode',
+      coffeeIcon: '☕',
+      coffeeStatus: 'Today\'s Status:<br/>Required.',
+      coffeeSub: 'Because some mornings just need one. ☕',
+      coffeeBg: 'linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%)',
+    },
+    {
+      range: [9, 12],
+      greeting: '✦ Good morning',
+      title: `Kavya's <span>Vibe</span> Dashboard`,
+      sub: 'Morning in full swing. You\'ve got this. 💪',
+      coffeeLabel: '☕ Second Cup?',
+      coffeeIcon: '☕',
+      coffeeStatus: 'Second cup<br/>unlocked.',
+      coffeeSub: 'No one\'s counting. Refill away. ☕',
+      coffeeBg: 'linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%)',
+    },
+    {
+      range: [12, 14],
+      greeting: '✦ Good afternoon',
+      title: `Kavya's <span>Midday</span> Dashboard`,
+      sub: 'Lunchtime. Breathe. Take a small break. 🍱',
+      coffeeLabel: '🍵 Lunch Break',
+      coffeeIcon: '🍵',
+      coffeeStatus: 'Midday Check-in:<br/>Eat something.',
+      coffeeSub: 'Food first. Hustle after. 🌿',
+      coffeeBg: 'linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 100%)',
+    },
+    {
+      range: [14, 17],
+      greeting: '✦ Good afternoon',
+      title: `Kavya's <span>Afternoon</span> Dashboard`,
+      sub: 'The golden window of focus. 🌤',
+      coffeeLabel: '☕ Afternoon Fuel',
+      coffeeIcon: '☕',
+      coffeeStatus: 'Afternoon slump?<br/>Coffee says no.',
+      coffeeSub: 'One last cup to carry you through. ☕',
+      coffeeBg: 'linear-gradient(135deg, #2c1810 0%, #5c3820 100%)',
+    },
+    {
+      range: [17, 20],
+      greeting: '✦ Good evening',
+      title: `Kavya's <span>Evening</span> Dashboard`,
+      sub: 'Golden hour. Slow down a little. 🌅',
+      coffeeLabel: '🫖 Evening Wind-down',
+      coffeeIcon: '🫖',
+      coffeeStatus: 'Evening Mode:<br/>Tea time.',
+      coffeeSub: 'Chamomile or chai — your call. 🌿',
+      coffeeBg: 'linear-gradient(135deg, #1a0a1a 0%, #3d1a2e 100%)',
+    },
+    {
+      range: [20, 22],
+      greeting: '✦ Good evening',
+      title: `Kavya's <span>Night</span> Dashboard`,
+      sub: 'Winding down. One chapter and then sleep. 📖',
+      coffeeLabel: '📖 Night Mode',
+      coffeeIcon: '🌙',
+      coffeeStatus: 'Reading time:<br/>One chapter.',
+      coffeeSub: 'Close the screen soon. Rest well. 🌿',
+      coffeeBg: 'linear-gradient(135deg, #0a0a1a 0%, #1a1a3d 100%)',
+    },
+    {
+      range: [22, 24],
+      greeting: '✦ Still up?',
+      title: `Kavya's <span>Late Night</span> Dashboard`,
+      sub: 'The quiet hours. Just you and your thoughts. 🌌',
+      coffeeLabel: '🌌 Late Night Mode',
+      coffeeIcon: '🌙',
+      coffeeStatus: 'Late night energy:<br/>Mysterious.',
+      coffeeSub: 'Tomorrow is a new canvas. 🌙',
+      coffeeBg: 'linear-gradient(135deg, #0a0010 0%, #1a0a2e 100%)',
+    },
+  ];
+
+  function getTimeSlot(hour) {
+    return timeSlots.find(s => hour >= s.range[0] && hour < s.range[1]) || timeSlots[2];
+  }
+
+  // --- Date & Time + Dynamic Content ---
   function updateTime() {
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    const now  = new Date();
+    const hour = now.getHours();
+    const slot = getTimeSlot(hour);
+
+    const dateStr = now.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const timeStr = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
     document.getElementById('currentDate').textContent = dateStr;
     document.getElementById('currentTime').textContent = timeStr;
+
+    // Update greeting
+    document.getElementById('greetingTag').textContent    = slot.greeting;
+    document.getElementById('greetingTitle').innerHTML    = slot.title;
+    document.getElementById('greetingSub').textContent    = slot.sub;
+
+    // Update coffee card
+    document.getElementById('coffeeLabel').textContent    = slot.coffeeLabel;
+    document.getElementById('coffeeIcon').textContent     = slot.coffeeIcon;
+    document.getElementById('coffeeStatus').innerHTML     = slot.coffeeStatus;
+    document.getElementById('coffeeSub').textContent      = slot.coffeeSub;
+    document.getElementById('coffeeCard').style.background = slot.coffeeBg;
   }
   updateTime();
   setInterval(updateTime, 60000);
