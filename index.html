@@ -713,7 +713,122 @@
       font-style: italic;
     }
 
-    .planner-progress { margin-top: 4px; }
+    /* Priority badges */
+    .priority-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+    .priority-high   { background: #fee2e2; color: #dc2626; }
+    .priority-medium { background: #fef3c7; color: #d97706; }
+    .priority-low    { background: #dcfce7; color: #16a34a; }
+
+    /* Due date tag */
+    .task-due {
+      font-size: 11px;
+      color: #6366f1;
+      margin-top: 2px;
+    }
+    .task-due.overdue { color: #dc2626; font-weight: 600; }
+
+    /* Filter row */
+    .planner-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .filter-btn.active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: white;
+    }
+
+    /* Clear done button */
+    .clear-done-btn {
+      background: none;
+      border: 1.5px solid #fee2e2;
+      color: #dc2626;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      padding: 5px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+      margin-left: auto;
+      transition: all 0.2s;
+    }
+    .clear-done-btn:hover { background: #fee2e2; }
+
+    /* Second input row */
+    .planner-input-row2 {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .priority-select {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      background: var(--cream);
+      color: var(--text-dark);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .priority-select:focus { border-color: var(--amber); }
+
+    .due-date-input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      background: var(--cream);
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .due-date-input:focus { border-color: var(--amber); }
+
+    /* Stats row */
+    .planner-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 12px;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-chip strong { color: var(--text-dark); font-size: 14px; }
 
     .progress-label {
       display: flex;
@@ -737,9 +852,280 @@
       transition: width 0.4s ease;
     }
 
+    /* ── GAMES SECTION ─────────────────────────────── */
+    .card-games {
+      grid-column: span 12;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: white;
+    }
+    .card-games .card-label { color: rgba(255,255,255,0.4); }
+    .games-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+    .games-sub { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 20px; }
+
+    /* Room setup */
+    .room-setup {
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .room-input {
+      flex: 1;
+      min-width: 160px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+    .room-input::placeholder { color: rgba(255,255,255,0.3); }
+    .room-input:focus { border-color: var(--amber); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.2);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+    .room-status {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      padding: 8px 0;
+      width: 100%;
+    }
+    .room-status.online { color: #4ade80; }
+
+    /* Game tabs */
+    .game-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .game-tab {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .game-tab.active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: white;
+    }
+
+    /* Game panels */
+    .game-panel { display: none; }
+    .game-panel.active { display: block; }
+
+    /* ── TIC TAC TOE ── */
+    .ttt-wrapper { text-align: center; }
+    .ttt-info {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
+    }
+    .ttt-board {
+      display: inline-grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 8px;
+      margin: 0 auto 16px;
+    }
+    .ttt-cell {
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      font-size: 2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      color: white;
+    }
+    .ttt-cell:hover:not(.taken) { background: rgba(255,255,255,0.15); }
+    .ttt-cell.taken { cursor: default; }
+    .ttt-cell.x-cell { color: var(--amber); }
+    .ttt-cell.o-cell { color: #60a5fa; }
+    .ttt-cell.win-cell { background: rgba(232,132,58,0.25); border-color: var(--amber); }
+    .ttt-status {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      min-height: 28px;
+    }
+
+    /* ── WORD GUESS ── */
+    .word-wrapper { max-width: 500px; margin: 0 auto; text-align: center; }
+    .word-display {
+      display: flex; gap: 10px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 18px;
+    }
+    .letter-box {
+      width: 44px; height: 52px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.15);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      transition: all 0.3s;
+    }
+    .letter-box.revealed { background: rgba(74,222,128,0.2); border-color: #4ade80; }
+    .letter-box.wrong    { background: rgba(239,68,68,0.2);  border-color: #ef4444; }
+    .hangman-lives {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 14px;
+    }
+    .lives-hearts { font-size: 1.1rem; letter-spacing: 2px; }
+    .word-input-row {
+      display: flex; gap: 10px; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .word-input {
+      width: 60px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'DM Serif Display', serif;
+      outline: none;
+    }
+    .word-input:focus { border-color: var(--amber); }
+    .guessed-letters {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 14px;
+      letter-spacing: 3px;
+    }
+    .word-status {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      min-height: 28px;
+      margin-bottom: 12px;
+    }
+    .word-hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    /* ── MEMORY CARD ── */
+    .memory-wrapper { text-align: center; }
+    .memory-info {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 14px;
+      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    }
+    .memory-score {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+    .memory-board {
+      display: inline-grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 8px;
+      margin: 0 auto 16px;
+    }
+    .mem-card {
+      width: 70px; height: 70px;
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s;
+      transform-style: preserve-3d;
+    }
+    .mem-card.flipped { transform: rotateY(180deg); }
+    .mem-card-front, .mem-card-back {
+      position: absolute; inset: 0;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      backface-visibility: hidden;
+    }
+    .mem-card-front {
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.2);
+    }
+    .mem-card-back {
+      background: rgba(232,132,58,0.2);
+      border: 1.5px solid var(--amber);
+      font-size: 1.8rem;
+      transform: rotateY(180deg);
+    }
+    .mem-card.matched .mem-card-front {
+      background: rgba(74,222,128,0.2);
+      border-color: #4ade80;
+    }
+    .mem-card.matched .mem-card-back {
+      background: rgba(74,222,128,0.2);
+      border-color: #4ade80;
+    }
+    .memory-turn {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Shared game controls */
+    .game-controls {
+      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* Last played song */
+    .last-played-bar {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .last-played-icon { font-size: 1.4rem; }
+    .last-played-info { flex: 1; }
+    .last-played-title { font-size: 13px; color: rgba(255,255,255,0.8); }
+    .last-played-time  { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .ttt-cell { width: 64px; height: 64px; font-size: 1.6rem; }
+      .mem-card  { width: 56px; height: 56px; }
+      .memory-board { grid-template-columns: repeat(4,1fr); gap: 6px; }
+    }
+
     /* Responsive */
     @media (max-width: 680px) {
-      .card-coffee, .card-f1, .card-mood, .card-music, .card-book, .card-quote, .card-planner {
+      .card-coffee, .card-f1, .card-mood, .card-music, .card-book, .card-quote, .card-planner, .card-games {
         grid-column: span 12;
       }
       .planner-slots { grid-template-columns: 1fr; }
@@ -800,8 +1186,6 @@
     <div class="card card-music">
       <div class="card-label">🎧 Kavya's Playlist</div>
       <div class="spotify-wrapper">
-
-        <!-- Click to Play Overlay -->
         <div class="play-overlay" id="playOverlay" onclick="startMusic()">
           <div class="play-circle">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -809,19 +1193,18 @@
             </svg>
           </div>
           <div class="play-overlay-title">Tap to Play Music 🎧</div>
-          <div class="play-overlay-sub">Kavya's Spotify Playlist</div>
+          <div class="play-overlay-sub" id="lastPlayedSub">Kavya's Spotify Playlist</div>
         </div>
-
-        <!-- Spotify Embed (loads after click) -->
-        <iframe
-          id="spotifyFrame"
-          src=""
-          width="100%"
-          height="352"
-          frameBorder="0"
-          allowfullscreen=""
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+        <iframe id="spotifyFrame" src="" width="100%" height="352" frameBorder="0"
+          allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
         </iframe>
+      </div>
+      <div class="last-played-bar" id="lastPlayedBar" style="display:none">
+        <div class="last-played-icon">🕐</div>
+        <div class="last-played-info">
+          <div class="last-played-title" id="lastPlayedTitle">—</div>
+          <div class="last-played-time"  id="lastPlayedTime">—</div>
+        </div>
       </div>
     </div>
 
@@ -854,7 +1237,15 @@
         </div>
       </div>
 
-      <!-- Add Task -->
+      <!-- Stats Row -->
+      <div class="planner-stats" id="plannerStats">
+        <div class="stat-chip">🔴 High <strong id="stat-high">0</strong></div>
+        <div class="stat-chip">🟡 Medium <strong id="stat-medium">0</strong></div>
+        <div class="stat-chip">🟢 Low <strong id="stat-low">0</strong></div>
+        <div class="stat-chip">✅ Done <strong id="stat-done">0</strong></div>
+      </div>
+
+      <!-- Add Task Row 1 -->
       <div class="planner-input-row">
         <input class="planner-input" id="taskInput" type="text" placeholder="Add a task for today..." />
         <input class="planner-time-input" id="taskTime" type="time" />
@@ -863,7 +1254,28 @@
           <option value="afternoon">☀️ Afternoon</option>
           <option value="evening">🌙 Evening</option>
         </select>
-        <button class="btn btn-amber" onclick="addTask()" style="white-space:nowrap;">+ Add</button>
+      </div>
+
+      <!-- Add Task Row 2 -->
+      <div class="planner-input-row2">
+        <select class="priority-select" id="taskPriority">
+          <option value="medium">🟡 Medium</option>
+          <option value="high">🔴 High</option>
+          <option value="low">🟢 Low</option>
+        </select>
+        <input class="due-date-input" id="taskDue" type="date" title="Due date (optional)" />
+        <button class="btn btn-amber" onclick="addTask()" style="white-space:nowrap; margin-left:auto;">+ Add Task</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="planner-filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('high', this)">🔴 High</button>
+        <button class="filter-btn" onclick="setFilter('medium', this)">🟡 Medium</button>
+        <button class="filter-btn" onclick="setFilter('low', this)">🟢 Low</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">⏳ Pending</button>
+        <button class="filter-btn" onclick="setFilter('done', this)">✅ Done</button>
+        <button class="clear-done-btn" onclick="clearDone()">🗑 Clear Done</button>
       </div>
 
       <!-- Slots -->
@@ -890,6 +1302,83 @@
         </div>
         <div class="progress-track">
           <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Games Card -->
+    <div class="card card-games">
+      <div class="card-label">🎮 Games Corner</div>
+      <div class="games-title">Play Together 🕹</div>
+      <div class="games-sub">Real-time multiplayer — both open on your own device</div>
+
+      <!-- Room Setup -->
+      <div class="room-setup">
+        <input class="room-input" id="roomInput" type="text" placeholder="Room name (e.g. kavya123)" maxlength="20"/>
+        <input class="room-input" id="playerInput" type="text" placeholder="Your name" maxlength="12" style="max-width:140px;"/>
+        <button class="btn btn-amber" onclick="joinRoom()">Join Room</button>
+        <div class="room-status" id="roomStatus">Enter a room name and your name to start playing together.</div>
+      </div>
+
+      <!-- Game Tabs -->
+      <div class="game-tabs">
+        <button class="game-tab active" onclick="switchGame('ttt', this)">⭕ Tic Tac Toe</button>
+        <button class="game-tab" onclick="switchGame('word', this)">📝 Word Guess</button>
+        <button class="game-tab" onclick="switchGame('memory', this)">🃏 Memory Cards</button>
+      </div>
+
+      <!-- TIC TAC TOE -->
+      <div class="game-panel active" id="panel-ttt">
+        <div class="ttt-wrapper">
+          <div class="ttt-status" id="ttt-status">Join a room to play</div>
+          <div class="ttt-board" id="ttt-board">
+            <div class="ttt-cell" onclick="tttMove(0)"></div>
+            <div class="ttt-cell" onclick="tttMove(1)"></div>
+            <div class="ttt-cell" onclick="tttMove(2)"></div>
+            <div class="ttt-cell" onclick="tttMove(3)"></div>
+            <div class="ttt-cell" onclick="tttMove(4)"></div>
+            <div class="ttt-cell" onclick="tttMove(5)"></div>
+            <div class="ttt-cell" onclick="tttMove(6)"></div>
+            <div class="ttt-cell" onclick="tttMove(7)"></div>
+            <div class="ttt-cell" onclick="tttMove(8)"></div>
+          </div>
+          <div class="ttt-info" id="ttt-score">—</div>
+          <div class="game-controls">
+            <button class="btn btn-ghost" onclick="resetTTT()">↺ New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORD GUESS -->
+      <div class="game-panel" id="panel-word">
+        <div class="word-wrapper">
+          <div class="word-status" id="word-status">Join a room to play</div>
+          <div class="word-hint"   id="word-hint"></div>
+          <div class="word-display" id="word-display"></div>
+          <div class="hangman-lives" id="word-lives"></div>
+          <div class="guessed-letters" id="guessed-letters"></div>
+          <div class="word-input-row">
+            <input class="word-input" id="letterInput" type="text" maxlength="1" placeholder="A"/>
+            <button class="btn btn-amber" onclick="guessLetter()">Guess</button>
+          </div>
+          <div class="game-controls">
+            <button class="btn btn-ghost" onclick="newWord()">↺ New Word</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEMORY CARDS -->
+      <div class="game-panel" id="panel-memory">
+        <div class="memory-wrapper">
+          <div class="memory-turn"  id="memory-turn">Join a room to play</div>
+          <div class="memory-info">
+            <div class="memory-score" id="mem-score-p1">You: 0</div>
+            <div class="memory-score" id="mem-score-p2">Opponent: 0</div>
+          </div>
+          <div class="memory-board" id="memory-board"></div>
+          <div class="game-controls">
+            <button class="btn btn-ghost" onclick="resetMemory()">↺ New Game</button>
+          </div>
         </div>
       </div>
     </div>
@@ -967,13 +1456,14 @@
     el.classList.add('mood-refresh');
   }
 
-  // Music is handled by Spotify embed
+  // Music — save last played to Firebase on click
   function startMusic() {
     const frame = document.getElementById('spotifyFrame');
     const overlay = document.getElementById('playOverlay');
-    // Load src only on click — triggers autoplay permission
     frame.src = "https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1";
     overlay.classList.add('hidden');
+    // Save last played time to Firebase (loaded via module script)
+    window._saveLastPlayed && window._saveLastPlayed();
   }
 
   // --- Quote Refresh ---
@@ -1018,7 +1508,7 @@
 <!-- Firebase Day Planner -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, push, onValue, update, remove, query, orderByChild } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA6X4vizsAdynQRGAIE-u-WX3gB3tI9V-U",
@@ -1032,91 +1522,107 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
-  // Today's date key e.g. "2026-03-14"
   const todayKey = new Date().toISOString().split('T')[0];
   const tasksRef = ref(db, `planner/${todayKey}`);
 
   const syncDot = document.getElementById('syncDot');
   const syncLabel = document.getElementById('syncLabel');
+  let currentFilter = 'all';
+  let allTasksCache = {};
 
-  function setSynced() {
-    syncDot.className = 'sync-dot synced';
-    syncLabel.textContent = 'Synced ✓';
-  }
-  function setSyncing() {
-    syncDot.className = 'sync-dot syncing';
-    syncLabel.textContent = 'Syncing...';
-  }
-  function setError() {
-    syncDot.className = 'sync-dot';
-    syncLabel.textContent = 'Offline';
+  const setSynced  = () => { syncDot.className = 'sync-dot synced';  syncLabel.textContent = 'Synced ✓'; };
+  const setSyncing = () => { syncDot.className = 'sync-dot syncing'; syncLabel.textContent = 'Syncing...'; };
+  const setError   = () => { syncDot.className = 'sync-dot';         syncLabel.textContent = 'Offline'; };
+
+  const priorityOrder = { high: 0, medium: 1, low: 2 };
+  const priorityLabel = { high: '🔴 High', medium: '🟡 Medium', low: '🟢 Low' };
+  const priorityClass = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
+
+  function isOverdue(due) {
+    if (!due) return false;
+    return due < todayKey;
   }
 
-  // Render tasks from Firebase snapshot
   function renderTasks(tasks) {
+    allTasksCache = tasks || {};
     const slots = { morning: [], afternoon: [], evening: [] };
-    if (tasks) {
-      Object.entries(tasks).forEach(([id, task]) => {
-        if (slots[task.slot]) slots[task.slot].push({ id, ...task });
-      });
-    }
+
+    Object.entries(allTasksCache).forEach(([id, task]) => {
+      // Apply filter
+      if (currentFilter === 'high'    && task.priority !== 'high')    return;
+      if (currentFilter === 'medium'  && task.priority !== 'medium')  return;
+      if (currentFilter === 'low'     && task.priority !== 'low')     return;
+      if (currentFilter === 'done'    && !task.done)                  return;
+      if (currentFilter === 'pending' && task.done)                   return;
+      if (slots[task.slot]) slots[task.slot].push({ id, ...task });
+    });
 
     ['morning', 'afternoon', 'evening'].forEach(slot => {
       const ul = document.getElementById(`slot-${slot}`);
       ul.innerHTML = '';
-      if (slots[slot].length === 0) {
+      const items = slots[slot].sort((a, b) => {
+        if (a.done !== b.done) return a.done ? 1 : -1;
+        return (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1);
+      });
+      if (items.length === 0) {
         ul.innerHTML = '<li class="empty-slot">No tasks yet</li>';
       } else {
-        slots[slot]
-          .sort((a, b) => (a.time || '').localeCompare(b.time || ''))
-          .forEach(task => {
-            const li = document.createElement('li');
-            li.className = 'task-item';
-            li.innerHTML = `
-              <div class="task-check ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}', ${task.done})"></div>
-              <div class="task-body">
-                <div class="task-text ${task.done ? 'done' : ''}">${task.text}</div>
-                ${task.time ? `<div class="task-time">⏰ ${task.time}</div>` : ''}
+        items.forEach(task => {
+          const overdue = isOverdue(task.due);
+          const li = document.createElement('li');
+          li.className = 'task-item';
+          li.innerHTML = `
+            <div class="task-check ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}', ${!!task.done})"></div>
+            <div class="task-body">
+              <div class="task-text ${task.done ? 'done' : ''}">${task.text}</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+                <span class="priority-badge ${priorityClass[task.priority] || 'priority-medium'}">${priorityLabel[task.priority] || '🟡 Medium'}</span>
+                ${task.time ? `<span class="task-time">⏰ ${task.time}</span>` : ''}
+                ${task.due  ? `<span class="task-due ${overdue && !task.done ? 'overdue' : ''}">📅 ${task.due}${overdue && !task.done ? ' ⚠️' : ''}</span>` : ''}
               </div>
-              <button class="task-delete" onclick="deleteTask('${task.id}')">✕</button>
-            `;
-            ul.appendChild(li);
-          });
+            </div>
+            <button class="task-delete" onclick="deleteTask('${task.id}')">✕</button>
+          `;
+          ul.appendChild(li);
+        });
       }
     });
 
-    // Update progress
-    const allTasks = Object.values(tasks || {});
-    const total = allTasks.length;
-    const done = allTasks.filter(t => t.done).length;
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    document.getElementById('progressText').textContent = `${done} / ${total} tasks done`;
+    // Stats
+    const all = Object.values(allTasksCache);
+    const total = all.length;
+    const done  = all.filter(t => t.done).length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressText').textContent    = `${done} / ${total} tasks done`;
     document.getElementById('progressBarFill').style.width = pct + '%';
+    document.getElementById('stat-high').textContent   = all.filter(t => t.priority === 'high').length;
+    document.getElementById('stat-medium').textContent = all.filter(t => t.priority === 'medium' || !t.priority).length;
+    document.getElementById('stat-low').textContent    = all.filter(t => t.priority === 'low').length;
+    document.getElementById('stat-done').textContent   = done;
   }
 
-  // Live listener — auto updates on any device
-  onValue(tasksRef, (snapshot) => {
-    renderTasks(snapshot.val());
-    setSynced();
-  }, () => setError());
+  // Live sync
+  onValue(tasksRef, snap => { renderTasks(snap.val()); setSynced(); }, setError);
 
   // Add task
   window.addTask = function() {
-    const text = document.getElementById('taskInput').value.trim();
-    const time = document.getElementById('taskTime').value;
-    const slot = document.getElementById('taskSlot').value;
-    if (!text) return;
+    const text     = document.getElementById('taskInput').value.trim();
+    const time     = document.getElementById('taskTime').value;
+    const slot     = document.getElementById('taskSlot').value;
+    const priority = document.getElementById('taskPriority').value;
+    const due      = document.getElementById('taskDue').value;
+    if (!text) { document.getElementById('taskInput').focus(); return; }
     setSyncing();
-    push(tasksRef, { text, time, slot, done: false, created: Date.now() })
+    push(tasksRef, { text, time, slot, priority, due, done: false, created: Date.now() })
       .then(() => {
-        document.getElementById('taskInput').value = '';
-        document.getElementById('taskTime').value = '';
-      })
-      .catch(setError);
+        document.getElementById('taskInput').value    = '';
+        document.getElementById('taskTime').value     = '';
+        document.getElementById('taskDue').value      = '';
+        document.getElementById('taskPriority').value = 'medium';
+      }).catch(setError);
   };
 
-  // Enter key to add
+  // Enter key
   document.getElementById('taskInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') window.addTask();
   });
@@ -1131,6 +1637,372 @@
   window.deleteTask = function(id) {
     setSyncing();
     remove(ref(db, `planner/${todayKey}/${id}`)).catch(setError);
+  };
+
+  // Filter
+  window.setFilter = function(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTasks(allTasksCache);
+  };
+
+  // Clear all done tasks
+  window.clearDone = function() {
+    const doneTasks = Object.entries(allTasksCache).filter(([, t]) => t.done);
+    if (doneTasks.length === 0) return;
+    if (!confirm(`Delete ${doneTasks.length} completed task(s)?`)) return;
+    setSyncing();
+    Promise.all(doneTasks.map(([id]) => remove(ref(db, `planner/${todayKey}/${id}`)))).catch(setError);
+  };
+</script>
+<!-- Games + Last Played Firebase Module -->
+<script type="module">
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, set, get, onValue, update, remove, push, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6X4vizsAdynQRGAIE-u-WX3gB3tI9V-U",
+    authDomain: "kavya-dashboard-143.firebaseapp.com",
+    databaseURL: "https://kavya-dashboard-143-default-rtdb.firebaseio.com",
+    projectId: "kavya-dashboard-143",
+    storageBucket: "kavya-dashboard-143.firebasestorage.app",
+    messagingSenderId: "742321607167",
+    appId: "1:742321607167:web:34c2ea73ff43e983cad7ca"
+  };
+
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig, 'games');
+  const db  = getDatabase(app);
+
+  /* ─── LAST PLAYED SONG ─────────────────────────── */
+  const lastPlayedRef = ref(db, 'music/lastPlayed');
+
+  window._saveLastPlayed = function() {
+    const now = new Date();
+    set(lastPlayedRef, {
+      playlist: "Kavya's Playlist",
+      playedAt: now.toISOString(),
+      playedAtLabel: now.toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' })
+    });
+  };
+
+  onValue(lastPlayedRef, snap => {
+    const d = snap.val();
+    if (!d) return;
+    const bar = document.getElementById('lastPlayedBar');
+    bar.style.display = 'flex';
+    document.getElementById('lastPlayedTitle').textContent = `Last played: ${d.playlist}`;
+    document.getElementById('lastPlayedTime').textContent  = d.playedAtLabel || '';
+    document.getElementById('lastPlayedSub').textContent   = `Last played ${d.playedAtLabel || ''}`;
+  });
+
+  /* ─── ROOM / GAME STATE ────────────────────────── */
+  let roomId   = null;
+  let myName   = null;
+  let myRole   = null; // 'host' | 'guest'
+  let gameUnsub = null;
+
+  window.joinRoom = function() {
+    const r = document.getElementById('roomInput').value.trim().toLowerCase().replace(/\s+/g,'');
+    const n = document.getElementById('playerInput').value.trim();
+    if (!r || !n) { alert('Enter a room name and your name!'); return; }
+    roomId = r; myName = n;
+    const roomRef = ref(db, `games/${roomId}/meta`);
+    get(roomRef).then(snap => {
+      if (!snap.exists()) {
+        // Create room as host (X)
+        myRole = 'host';
+        set(ref(db, `games/${roomId}/meta`), { host: myName, guest: '', created: Date.now() });
+        setStatus(`Room "${roomId}" created! You are ❌ — share the room name with your friend.`, true);
+      } else {
+        const meta = snap.val();
+        if (!meta.guest) {
+          // Join as guest (O)
+          myRole = 'guest';
+          update(ref(db, `games/${roomId}/meta`), { guest: myName });
+          setStatus(`Joined room "${roomId}"! You are ⭕ — ${meta.host} is ❌`, true);
+        } else {
+          myRole = meta.host === myName ? 'host' : 'guest';
+          setStatus(`Reconnected to room "${roomId}" as ${myRole === 'host' ? '❌' : '⭕'}`, true);
+        }
+      }
+      subscribeToRoom();
+      initTTT();
+      initMemory();
+      initWord();
+    });
+  };
+
+  function setStatus(msg, online=false) {
+    const el = document.getElementById('roomStatus');
+    el.textContent = msg;
+    el.className = 'room-status' + (online ? ' online' : '');
+  }
+
+  function subscribeToRoom() {
+    if (gameUnsub) gameUnsub();
+  }
+
+  /* ─── GAME TABS ─────────────────────────────────── */
+  window.switchGame = function(game, btn) {
+    document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`panel-${game}`).classList.add('active');
+  };
+
+  /* ─── TIC TAC TOE ───────────────────────────────── */
+  const WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  let tttUnsub = null;
+
+  function tttRef()  { return ref(db, `games/${roomId}/ttt`); }
+
+  function initTTT() {
+    if (tttUnsub) tttUnsub();
+    tttUnsub = onValue(tttRef(), snap => {
+      const s = snap.val() || { board: Array(9).fill(''), turn: 'X', scores: {X:0,O:0}, status:'playing' };
+      renderTTT(s);
+    });
+    // Create if not exists
+    get(tttRef()).then(s => {
+      if (!s.exists()) set(tttRef(), { board: Array(9).fill(''), turn:'X', scores:{X:0,O:0}, status:'playing' });
+    });
+  }
+
+  function renderTTT(s) {
+    const cells = document.querySelectorAll('.ttt-cell');
+    const mySymbol = myRole === 'host' ? 'X' : 'O';
+    s.board.forEach((v, i) => {
+      cells[i].textContent = v === 'X' ? '❌' : v === 'O' ? '⭕' : '';
+      cells[i].className = 'ttt-cell' + (v ? ' taken' : '') + (v==='X' ? ' x-cell' : v==='O' ? ' o-cell' : '');
+    });
+    // Highlight winning cells
+    if (s.winner) {
+      WINS.forEach(combo => {
+        if (s.board[combo[0]] && s.board[combo[0]]===s.board[combo[1]] && s.board[combo[1]]===s.board[combo[2]]) {
+          combo.forEach(i => cells[i].classList.add('win-cell'));
+        }
+      });
+    }
+    const sc = s.scores || {X:0,O:0};
+    document.getElementById('ttt-score').textContent = `❌ ${sc.X||0}  —  ⭕ ${sc.O||0}`;
+    if (s.status === 'draw')   document.getElementById('ttt-status').textContent = "It's a draw! 🤝";
+    else if (s.winner)         document.getElementById('ttt-status').textContent = `${s.winner==='X'?'❌':'⭕'} Wins! 🎉`;
+    else if (!roomId)          document.getElementById('ttt-status').textContent = 'Join a room to play';
+    else if (s.turn===mySymbol) document.getElementById('ttt-status').textContent = 'Your turn!';
+    else                        document.getElementById('ttt-status').textContent = "Opponent's turn...";
+  }
+
+  window.tttMove = function(i) {
+    if (!roomId) return;
+    get(tttRef()).then(snap => {
+      const s = snap.val();
+      if (!s || s.board[i] || s.status !== 'playing') return;
+      const mySymbol = myRole === 'host' ? 'X' : 'O';
+      if (s.turn !== mySymbol) return;
+      const board = [...s.board];
+      board[i] = mySymbol;
+      const winner = checkWin(board);
+      const draw   = !winner && board.every(c => c);
+      const scores = s.scores || {X:0,O:0};
+      if (winner) scores[winner] = (scores[winner]||0) + 1;
+      update(tttRef(), {
+        board, turn: mySymbol==='X'?'O':'X',
+        winner: winner||null, status: winner?'won':draw?'draw':'playing', scores
+      });
+    });
+  };
+
+  function checkWin(b) {
+    for (const [a,c,d] of WINS) if (b[a] && b[a]===b[c] && b[c]===b[d]) return b[a];
+    return null;
+  }
+
+  window.resetTTT = function() {
+    if (!roomId) return;
+    get(tttRef()).then(snap => {
+      const s = snap.val() || {};
+      set(tttRef(), { board: Array(9).fill(''), turn:'X', scores: s.scores||{X:0,O:0}, status:'playing', winner:null });
+    });
+  };
+
+  /* ─── WORD GUESS ─────────────────────────────────── */
+  const WORDS = [
+    { word:'FERRARI', hint:'Famous Italian F1 team 🏎' },
+    { word:'COFFEE',  hint:'Morning essential ☕' },
+    { word:'MUSIC',   hint:'Soul food 🎧' },
+    { word:'GALAXY',  hint:'Far, far away 🌌' },
+    { word:'SUNSET',  hint:'Golden hour 🌅' },
+    { word:'KINDLE',  hint:'Reading device 📖' },
+    { word:'DREAMS',  hint:'Eyes closed 💭' },
+    { word:'BREEZE',  hint:'Gentle wind 🌿' },
+    { word:'MAGIC',   hint:'Unexplained wonder ✨' },
+    { word:'VELVET',  hint:'Soft fabric 🎶' },
+  ];
+
+  let wordUnsub = null;
+  function wordRef() { return ref(db, `games/${roomId}/word`); }
+
+  function initWord() {
+    if (wordUnsub) wordUnsub();
+    wordUnsub = onValue(wordRef(), snap => {
+      const s = snap.val();
+      if (s) renderWord(s);
+    });
+    get(wordRef()).then(s => {
+      if (!s.exists()) newWordState();
+    });
+  }
+
+  function newWordState() {
+    const w = WORDS[Math.floor(Math.random()*WORDS.length)];
+    set(wordRef(), { word: w.word, hint: w.hint, guessed: [], lives: 6, status:'playing',
+      setter: myName, guesserScore:0, setterScore:0 });
+  }
+
+  window.newWord = function() { if (roomId) newWordState(); };
+
+  function renderWord(s) {
+    const guessed = s.guessed || [];
+    const word    = s.word || '';
+    const lives   = s.lives ?? 6;
+
+    // Letter boxes
+    const display = document.getElementById('word-display');
+    display.innerHTML = word.split('').map(l =>
+      `<div class="letter-box ${guessed.includes(l)?'revealed':''}">${guessed.includes(l)?l:''}</div>`
+    ).join('');
+
+    document.getElementById('word-hint').textContent = `Hint: ${s.hint||''}`;
+    document.getElementById('word-lives').innerHTML =
+      `<div class="lives-hearts">${'❤️'.repeat(lives)}${'🖤'.repeat(6-lives)}</div>`;
+    document.getElementById('guessed-letters').textContent =
+      guessed.length ? `Tried: ${guessed.join(' ')}` : '';
+
+    if      (s.status==='won')  document.getElementById('word-status').textContent = `🎉 Word found: ${word}!`;
+    else if (s.status==='lost') document.getElementById('word-status').textContent = `💀 Out of lives! Word was: ${word}`;
+    else if (!roomId)           document.getElementById('word-status').textContent = 'Join a room to play';
+    else                        document.getElementById('word-status').textContent =
+      word.split('').every(l => guessed.includes(l)) ? '🎉 Solved!' : `Guess the word (${word.length} letters)`;
+  }
+
+  window.guessLetter = function() {
+    if (!roomId) return;
+    const inp = document.getElementById('letterInput');
+    const letter = inp.value.toUpperCase().trim();
+    inp.value = '';
+    if (!letter || !/[A-Z]/.test(letter)) return;
+    get(wordRef()).then(snap => {
+      const s = snap.val();
+      if (!s || s.status !== 'playing') return;
+      const guessed = [...(s.guessed||[])];
+      if (guessed.includes(letter)) return;
+      guessed.push(letter);
+      const correct = s.word.includes(letter);
+      const lives   = correct ? s.lives : (s.lives||6) - 1;
+      const won     = s.word.split('').every(l => guessed.includes(l));
+      const lost    = lives <= 0;
+      update(wordRef(), { guessed, lives, status: won?'won':lost?'lost':'playing' });
+    });
+    inp.focus();
+  };
+
+  document.getElementById('letterInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.guessLetter();
+  });
+
+  /* ─── MEMORY CARDS ───────────────────────────────── */
+  const EMOJIS = ['🌸','🎸','🏎','☕','🎧','📖','✨','🌙'];
+  let memUnsub = null;
+  function memRef() { return ref(db, `games/${roomId}/memory`); }
+
+  function initMemory() {
+    if (memUnsub) memUnsub();
+    memUnsub = onValue(memRef(), snap => {
+      const s = snap.val();
+      if (s) renderMemory(s);
+    });
+    get(memRef()).then(s => { if (!s.exists()) newMemoryState(); });
+  }
+
+  function newMemoryState() {
+    const cards = [...EMOJIS,...EMOJIS]
+      .map((e,i)=>({id:i, emoji:e, flipped:false, matched:false}))
+      .sort(()=>Math.random()-0.5)
+      .map((c,i)=>({...c,pos:i}));
+    const cardsObj = {};
+    cards.forEach(c => { cardsObj[c.pos] = c; });
+    set(memRef(), { cards: cardsObj, turn:'host', flipped:[], scores:{host:0,guest:0}, status:'playing' });
+  }
+
+  window.resetMemory = function() { if (roomId) newMemoryState(); };
+
+  function renderMemory(s) {
+    const board = document.getElementById('memory-board');
+    const cards = s.cards || {};
+    board.innerHTML = '';
+    Object.values(cards).sort((a,b)=>a.pos-b.pos).forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'mem-card' + (c.flipped||c.matched?' flipped':'') + (c.matched?' matched':'');
+      div.innerHTML = `<div class="mem-card-front">?</div><div class="mem-card-back">${c.emoji}</div>`;
+      if (!c.matched && !c.flipped) div.onclick = () => memFlip(c.pos);
+      board.appendChild(div);
+    });
+    const sc = s.scores || {};
+    const isHost = myRole === 'host';
+    document.getElementById('mem-score-p1').textContent = `You: ${isHost ? sc.host||0 : sc.guest||0}`;
+    document.getElementById('mem-score-p2').textContent = `Opponent: ${isHost ? sc.guest||0 : sc.host||0}`;
+    const myTurn = s.turn === myRole;
+    document.getElementById('memory-turn').textContent =
+      !roomId ? 'Join a room to play' :
+      s.status==='done' ? `🎉 Game over! You: ${isHost?sc.host:sc.guest} — Opponent: ${isHost?sc.guest:sc.host}` :
+      myTurn ? 'Your turn — flip a card!' : "Opponent's turn...";
+  }
+
+  window.memFlip = function(pos) {
+    if (!roomId) return;
+    get(memRef()).then(snap => {
+      const s = snap.val();
+      if (!s || s.status!=='playing') return;
+      if (s.turn !== myRole) return;
+      const flipped = s.flipped || [];
+      if (flipped.includes(pos) || s.cards[pos].matched) return;
+      const newFlipped = [...flipped, pos];
+      // Show card
+      const upd = {};
+      upd[`cards/${pos}/flipped`] = true;
+      upd['flipped'] = newFlipped;
+      update(memRef(), upd).then(() => {
+        if (newFlipped.length === 2) {
+          // Check match after short delay
+          setTimeout(() => {
+            get(memRef()).then(snap2 => {
+              const s2 = snap2.val();
+              const [a, b] = s2.flipped;
+              const match = s2.cards[a].emoji === s2.cards[b].emoji;
+              const upd2 = {};
+              if (match) {
+                upd2[`cards/${a}/matched`] = true;
+                upd2[`cards/${b}/matched`] = true;
+                upd2[`cards/${a}/flipped`] = false;
+                upd2[`cards/${b}/flipped`] = false;
+                upd2[`scores/${myRole}`] = (s2.scores?.[myRole]||0) + 1;
+              } else {
+                upd2[`cards/${a}/flipped`] = false;
+                upd2[`cards/${b}/flipped`] = false;
+                upd2['turn'] = myRole === 'host' ? 'guest' : 'host';
+              }
+              upd2['flipped'] = [];
+              // Check if all matched
+              const allMatched = Object.values(s2.cards).every(c => c.matched || (c.pos===a&&match) || (c.pos===b&&match));
+              if (allMatched) upd2['status'] = 'done';
+              update(memRef(), upd2);
+            });
+          }, 900);
+        }
+      });
+    });
   };
 </script>
 </body>
