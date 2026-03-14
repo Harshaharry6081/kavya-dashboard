@@ -523,11 +523,228 @@
 
     .mood-refresh { animation: moodSwap 0.4s ease both; }
 
+    /* Day Planner Card */
+    .card-planner {
+      grid-column: span 12;
+      background: var(--warm-white);
+    }
+
+    .planner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .planner-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--text-dark);
+    }
+
+    .planner-sync-status {
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d1d5db;
+      transition: background 0.3s;
+    }
+
+    .sync-dot.synced { background: #22c55e; }
+    .sync-dot.syncing { background: var(--amber); animation: pulse-dot 1s infinite; }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .planner-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .planner-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: var(--cream);
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .planner-input:focus { border-color: var(--amber); }
+    .planner-input::placeholder { color: var(--text-soft); }
+
+    .planner-time-input {
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: var(--cream);
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 120px;
+    }
+
+    .planner-time-input:focus { border-color: var(--amber); }
+
+    .planner-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .slot {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1.5px solid var(--border);
+    }
+
+    .slot-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+    }
+
+    .slot-morning .slot-title { color: #d97706; }
+    .slot-afternoon .slot-title { color: #0284c7; }
+    .slot-evening .slot-title { color: #7c3aed; }
+
+    .task-list { list-style: none; min-height: 40px; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .task-item:last-child { border-bottom: none; }
+
+    .task-check {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .task-check.checked {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .task-check.checked::after {
+      content: '✓';
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .task-body { flex: 1; }
+
+    .task-text {
+      font-size: 13px;
+      color: var(--text-dark);
+      line-height: 1.4;
+      transition: all 0.2s;
+    }
+
+    .task-text.done {
+      text-decoration: line-through;
+      color: var(--text-soft);
+    }
+
+    .task-time {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+
+    .task-delete {
+      background: none;
+      border: none;
+      color: var(--text-soft);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .task-item:hover .task-delete { opacity: 1; }
+
+    .empty-slot {
+      font-size: 12px;
+      color: var(--text-soft);
+      text-align: center;
+      padding: 12px 0;
+      font-style: italic;
+    }
+
+    .planner-progress { margin-top: 4px; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--amber-light));
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
     /* Responsive */
     @media (max-width: 680px) {
-      .card-coffee, .card-f1, .card-mood, .card-music, .card-book, .card-quote {
+      .card-coffee, .card-f1, .card-mood, .card-music, .card-book, .card-quote, .card-planner {
         grid-column: span 12;
       }
+      .planner-slots { grid-template-columns: 1fr; }
+      .planner-input-row { flex-wrap: wrap; }
+      .planner-time-input { width: 100%; }
     }
   </style>
 </head>
@@ -622,6 +839,59 @@
       <div class="big-quote">"</div>
       <div class="quote-text" id="quoteText">Rest is not laziness — it is the space where good ideas find you.</div>
       <button class="quote-refresh" onclick="refreshQuote()">↻ New thought</button>
+    </div>
+
+    <!-- Day Planner Card -->
+    <div class="card card-planner">
+      <div class="planner-header">
+        <div>
+          <div class="card-label">📅 Day Planner</div>
+          <div class="planner-title">Today's Plan</div>
+        </div>
+        <div class="planner-sync-status">
+          <div class="sync-dot" id="syncDot"></div>
+          <span id="syncLabel">Connecting...</span>
+        </div>
+      </div>
+
+      <!-- Add Task -->
+      <div class="planner-input-row">
+        <input class="planner-input" id="taskInput" type="text" placeholder="Add a task for today..." />
+        <input class="planner-time-input" id="taskTime" type="time" />
+        <select class="planner-time-input" id="taskSlot" style="width:130px;">
+          <option value="morning">🌅 Morning</option>
+          <option value="afternoon">☀️ Afternoon</option>
+          <option value="evening">🌙 Evening</option>
+        </select>
+        <button class="btn btn-amber" onclick="addTask()" style="white-space:nowrap;">+ Add</button>
+      </div>
+
+      <!-- Slots -->
+      <div class="planner-slots">
+        <div class="slot slot-morning">
+          <div class="slot-title">🌅 Morning</div>
+          <ul class="task-list" id="slot-morning"><li class="empty-slot">No tasks yet</li></ul>
+        </div>
+        <div class="slot slot-afternoon">
+          <div class="slot-title">☀️ Afternoon</div>
+          <ul class="task-list" id="slot-afternoon"><li class="empty-slot">No tasks yet</li></ul>
+        </div>
+        <div class="slot slot-evening">
+          <div class="slot-title">🌙 Evening</div>
+          <ul class="task-list" id="slot-evening"><li class="empty-slot">No tasks yet</li></ul>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="planner-progress">
+        <div class="progress-label">
+          <span>Daily Progress</span>
+          <span id="progressText">0 / 0 tasks done</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Easter Egg Card -->
@@ -743,6 +1013,125 @@
     document.getElementById('easterCard').style.cursor = 'default';
     document.getElementById('easterCard').onclick = null;
   }
+</script>
+
+<!-- Firebase Day Planner -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6X4vizsAdynQRGAIE-u-WX3gB3tI9V-U",
+    authDomain: "kavya-dashboard-143.firebaseapp.com",
+    databaseURL: "https://kavya-dashboard-143-default-rtdb.firebaseio.com",
+    projectId: "kavya-dashboard-143",
+    storageBucket: "kavya-dashboard-143.firebasestorage.app",
+    messagingSenderId: "742321607167",
+    appId: "1:742321607167:web:34c2ea73ff43e983cad7ca"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Today's date key e.g. "2026-03-14"
+  const todayKey = new Date().toISOString().split('T')[0];
+  const tasksRef = ref(db, `planner/${todayKey}`);
+
+  const syncDot = document.getElementById('syncDot');
+  const syncLabel = document.getElementById('syncLabel');
+
+  function setSynced() {
+    syncDot.className = 'sync-dot synced';
+    syncLabel.textContent = 'Synced ✓';
+  }
+  function setSyncing() {
+    syncDot.className = 'sync-dot syncing';
+    syncLabel.textContent = 'Syncing...';
+  }
+  function setError() {
+    syncDot.className = 'sync-dot';
+    syncLabel.textContent = 'Offline';
+  }
+
+  // Render tasks from Firebase snapshot
+  function renderTasks(tasks) {
+    const slots = { morning: [], afternoon: [], evening: [] };
+    if (tasks) {
+      Object.entries(tasks).forEach(([id, task]) => {
+        if (slots[task.slot]) slots[task.slot].push({ id, ...task });
+      });
+    }
+
+    ['morning', 'afternoon', 'evening'].forEach(slot => {
+      const ul = document.getElementById(`slot-${slot}`);
+      ul.innerHTML = '';
+      if (slots[slot].length === 0) {
+        ul.innerHTML = '<li class="empty-slot">No tasks yet</li>';
+      } else {
+        slots[slot]
+          .sort((a, b) => (a.time || '').localeCompare(b.time || ''))
+          .forEach(task => {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `
+              <div class="task-check ${task.done ? 'checked' : ''}" onclick="toggleTask('${task.id}', ${task.done})"></div>
+              <div class="task-body">
+                <div class="task-text ${task.done ? 'done' : ''}">${task.text}</div>
+                ${task.time ? `<div class="task-time">⏰ ${task.time}</div>` : ''}
+              </div>
+              <button class="task-delete" onclick="deleteTask('${task.id}')">✕</button>
+            `;
+            ul.appendChild(li);
+          });
+      }
+    });
+
+    // Update progress
+    const allTasks = Object.values(tasks || {});
+    const total = allTasks.length;
+    const done = allTasks.filter(t => t.done).length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressText').textContent = `${done} / ${total} tasks done`;
+    document.getElementById('progressBarFill').style.width = pct + '%';
+  }
+
+  // Live listener — auto updates on any device
+  onValue(tasksRef, (snapshot) => {
+    renderTasks(snapshot.val());
+    setSynced();
+  }, () => setError());
+
+  // Add task
+  window.addTask = function() {
+    const text = document.getElementById('taskInput').value.trim();
+    const time = document.getElementById('taskTime').value;
+    const slot = document.getElementById('taskSlot').value;
+    if (!text) return;
+    setSyncing();
+    push(tasksRef, { text, time, slot, done: false, created: Date.now() })
+      .then(() => {
+        document.getElementById('taskInput').value = '';
+        document.getElementById('taskTime').value = '';
+      })
+      .catch(setError);
+  };
+
+  // Enter key to add
+  document.getElementById('taskInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.addTask();
+  });
+
+  // Toggle done
+  window.toggleTask = function(id, currentDone) {
+    setSyncing();
+    update(ref(db, `planner/${todayKey}/${id}`), { done: !currentDone }).catch(setError);
+  };
+
+  // Delete task
+  window.deleteTask = function(id) {
+    setSyncing();
+    remove(ref(db, `planner/${todayKey}/${id}`)).catch(setError);
+  };
 </script>
 </body>
 </html>
