@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ref, push, onValue, update, remove, set, get } from 'firebase/database'
 import { db } from '../firebase/config'
 import BookCard from '../components/BookCard'
+import EpubLibrary from './EpubLibrary'
 import styles from './Dashboard.module.css'
 
 /* ── Constants ────────────────────────────────────────── */
@@ -124,14 +125,78 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
   /* music */
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [lastPlayed, setLastPlayed] = useState(null)
+  const [playlists, setPlaylists] = useState([])
+  const [currentPlaylistId, setCurrentPlaylistId] = useState(null)
+  const [addingPlaylist, setAddingPlaylist] = useState(false)
+  const [newPlaylistUrl, setNewPlaylistUrl] = useState('')
+  const [newPlaylistName, setNewPlaylistName] = useState('')
+
   useEffect(() => {
-    const unsub = onValue(ref(db, 'music/lastPlayed'), snap => setLastPlayed(snap.val()))
-    return () => unsub()
-  }, [])
+    const unsubLast = onValue(ref(db, 'music/lastPlayed'), snap => {
+      const data = snap.val()
+      if (data) {
+        setLastPlayed(data)
+        if (data.playlistId) setCurrentPlaylistId(data.playlistId)
+      }
+    })
+    const unsubLists = onValue(ref(db, 'music/playlists'), snap => {
+      const data = snap.val()
+      if (data) {
+        const arr = Object.values(data).sort((a,b) => a.addedAt - b.addedAt)
+        setPlaylists(arr)
+        if (arr.length > 0 && !currentPlaylistId) {
+          setCurrentPlaylistId(arr[0].id)
+        }
+      } else {
+        /* Default fallback playlist if DB is empty */
+        const def = { id: 'default', name: "Kavya's Defaults", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1", addedAt: Date.now() }
+        setPlaylists([def])
+        setCurrentPlaylistId('default')
+        set(ref(db, `music/playlists/default`), def)
+      }
+    })
+    return () => { unsubLast(); unsubLists() }
+  }, [currentPlaylistId])
+
+  const parseSpotifyUrl = (url) => {
+    try {
+      if (url.includes('open.spotify.com/playlist/')) {
+        const id = url.split('playlist/')[1].split('?')[0]
+        return `https://open.spotify.com/embed/playlist/${id}?utm_source=generator&theme=0&autoplay=1`
+      }
+      if (url.includes('open.spotify.com/embed/')) return url
+      return null
+    } catch { return null }
+  }
+
+  const saveNewPlaylist = () => {
+    if (!newPlaylistName.trim() || !newPlaylistUrl.trim()) return
+    const embedUrl = parseSpotifyUrl(newPlaylistUrl)
+    if (!embedUrl) { alert('Please enter a valid Spotify Playlist link.'); return }
+    
+    const id = `pl_${Date.now()}`
+    set(ref(db, `music/playlists/${id}`), { id, name: newPlaylistName.trim(), url: embedUrl, addedAt: Date.now() })
+    setCurrentPlaylistId(id)
+    setAddingPlaylist(false)
+    setNewPlaylistUrl('')
+    setNewPlaylistName('')
+  }
+  
+  const deletePlaylist = (id) => {
+    if(!confirm('Are you sure you want to delete this playlist?')) return
+    remove(ref(db, `music/playlists/${id}`))
+    if (currentPlaylistId === id) {
+      const left = playlists.filter(p => p.id !== id)
+      setCurrentPlaylistId(left.length > 0 ? left[0].id : null)
+      setMusicPlaying(false)
+    }
+  }
+
   const startMusic = () => {
     setMusicPlaying(true)
     const now2 = new Date()
-    set(ref(db, 'music/lastPlayed'), { playlist:"Kavya's Playlist", playedAt: now2.toISOString(), playedAtLabel: now2.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}) })
+    const p = playlists.find(x => x.id === currentPlaylistId) || playlists[0]
+    set(ref(db, 'music/lastPlayed'), { playlistId: p?.id || null, playlistName: p?.name || "Unknown", playedAt: now2.toISOString(), playedAtLabel: now2.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}) })
   }
 
   /* note */
@@ -148,7 +213,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
 
   /* main tabs */
   const [tab, setTab] = useState('overview')
-  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'planner',  label:'📅 Day Planner' },{ key:'bookshelf',label:'📚 Book Shelf' },{ key:'games',    label:'🎮 Games' }]
+  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'planner',  label:'📅 Day Planner' },{ key:'bookshelf',label:'📚 Book Shelf' },{ key:'ereader',  label:'📖 E-Reader' },{ key:'games',    label:'🎮 Games' }]
 
   /* ── Day Planner (Firebase) ── */
   const todayKey = useMemo(() => new Date().toISOString().split('T')[0], [])
@@ -458,21 +523,52 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
 
           {/* Music Card */}
           <div className={styles.cardMusic}>
-            <div className={styles.cardLabelLight}>🎧 Kavya's Playlist</div>
-            <div className={styles.spotifyWrap}>
-              {!musicPlaying && (
-                <div className={styles.playOverlay} onClick={startMusic}>
-                  <div className={styles.playCircle}>
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                  </div>
-                  <div className={styles.playOverlayTitle}>Tap to Play Music 🎧</div>
-                  <div className={styles.playOverlaySub}>{lastPlayed ? `Last played ${lastPlayed.playedAtLabel}` : "Kavya's Spotify Playlist"}</div>
-                </div>
-              )}
-              {musicPlaying && (
-                <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1" width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="Kavya Playlist" />
-              )}
+            <div className={styles.musicHeader}>
+              <div className={styles.cardLabelLight}>🎧 Music</div>
+              <div className={styles.musicControls}>
+                {playlists.length > 0 && !addingPlaylist && (
+                  <select 
+                    className={styles.playlistSelect} 
+                    value={currentPlaylistId || ''} 
+                    onChange={e => { setCurrentPlaylistId(e.target.value); setMusicPlaying(false); }}
+                  >
+                    {playlists.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                  </select>
+                )}
+                {!addingPlaylist && <button className={styles.addPlaylistBtn} onClick={() => setAddingPlaylist(true)}>+</button>}
+                {!addingPlaylist && currentPlaylistId && playlists.find(p=>p.id===currentPlaylistId)?.id !== 'default' && (
+                  <button className={styles.addPlaylistBtn} onClick={() => deletePlaylist(currentPlaylistId)} style={{color:'#ef4444'}}>✕</button>
+                )}
+              </div>
             </div>
+
+            {addingPlaylist && (
+              <div className={styles.addPlaylistArea}>
+                 <input className={styles.inputField} value={newPlaylistName} onChange={e=>setNewPlaylistName(e.target.value)} placeholder="Playlist Name (e.g. Focus Vibes)" />
+                 <input className={styles.inputField} value={newPlaylistUrl} onChange={e=>setNewPlaylistUrl(e.target.value)} placeholder="Spotify Playlist URL" />
+                 <div style={{display:'flex',gap:'8px'}}>
+                    <button className={styles.btnAction} onClick={saveNewPlaylist}>Save</button>
+                    <button className={styles.btnCancel} onClick={() => setAddingPlaylist(false)}>Cancel</button>
+                 </div>
+              </div>
+            )}
+
+            {!addingPlaylist && (
+              <div className={styles.spotifyWrap}>
+                {!musicPlaying && (
+                  <div className={styles.playOverlay} onClick={startMusic}>
+                    <div className={styles.playCircle}>
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <div className={styles.playOverlayTitle}>{playlists.find(p=>p.id===currentPlaylistId)?.name || 'Play Music'}</div>
+                    <div className={styles.playOverlaySub}>{lastPlayed?.playlistId === currentPlaylistId ? `Last played ${lastPlayed.playedAtLabel}` : "Click to start listening 🎧"}</div>
+                  </div>
+                )}
+                {musicPlaying && currentPlaylistId && playlists.find(p=>p.id===currentPlaylistId) && (
+                  <iframe src={playlists.find(p=>p.id===currentPlaylistId).url} width="100%" height="352" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" title="Spotify Playlist" />
+                )}
+              </div>
+            )}
           </div>
 
           {/* Book Card */}
@@ -658,6 +754,9 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
           )}
         </div>
       )}
+
+      {/* ═══ E-READER TAB ═══ */}
+      {tab==='ereader' && <EpubLibrary />}
 
       {/* ═══ GAMES TAB ═══ */}
       {tab==='games' && (

@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Shelf from './pages/Shelf'
 import BookDetail from './pages/BookDetail'
 import AddBook from './pages/AddBook'
+import EpubReader from './pages/EpubReader'
 import { subscribeBooks } from './firebase/books'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/book/:id"   element={<BookDetail books={books} />} />
         <Route path="/add"        element={<AddBook />} />
         <Route path="/edit/:id"   element={<AddBook books={books} />} />
+        <Route path="/reader/:bookId" element={<EpubReader />} />
       </Routes>
     </>
   )
