@@ -21,6 +21,10 @@ export default function SpaceBoard({ uid }) {
   const [modalChecks, setModalChecks] = useState([])
   const [newCheckText, setNewCheckText] = useState('')
 
+  // New Space Modal
+  const [showNewSpaceModal, setShowNewSpaceModal] = useState(false)
+  const [newSpaceName, setNewSpaceName] = useState('')
+
   // 1. Fetch Spaces
   useEffect(() => {
     if (!uid) return
@@ -48,12 +52,13 @@ export default function SpaceBoard({ uid }) {
   }, [uid, activeSpaceId])
 
   // --- Spaces Management ---
-  const addSpace = () => {
-    const name = prompt("Enter new space name (e.g. Studying, Groceries):")
-    if (!name || !name.trim()) return
+  const saveNewSpace = () => {
+    if (!newSpaceName.trim()) return
     const id = `sp_${Date.now()}`
-    set(ref(db, `users/${uid}/spaces/${id}`), { name: name.trim(), emoji: '📁', createdAt: Date.now() })
+    set(ref(db, `users/${uid}/spaces/${id}`), { name: newSpaceName.trim(), emoji: '📁', createdAt: Date.now() })
     setActiveSpaceId(id)
+    setShowNewSpaceModal(false)
+    setNewSpaceName('')
   }
 
   const deleteSpace = () => {
@@ -94,8 +99,8 @@ export default function SpaceBoard({ uid }) {
   }
 
   // --- Modal Management ---
-  const openNewTaskModal = () => {
-    setModalForm({ title: '', desc: '', status: 'todo' })
+  const openNewTaskModal = (colId = 'todo') => {
+    setModalForm({ title: '', desc: '', status: colId })
     setModalChecks([])
     setSelectedTask('new')
   }
@@ -172,7 +177,7 @@ export default function SpaceBoard({ uid }) {
       <div className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <span>Your Spaces</span>
-          <button className={styles.addSpaceBtn} onClick={addSpace} title="New Space">+</button>
+          <button className={styles.addSpaceBtn} onClick={() => {setNewSpaceName(''); setShowNewSpaceModal(true);}} title="New Space">+</button>
         </div>
         <div className={styles.spacesList}>
           {spaces.length === 0 && <div className={styles.emptySpaces}>No spaces yet.<br/>Click + to add "Studying" or "Groceries"!</div>}
@@ -199,7 +204,6 @@ export default function SpaceBoard({ uid }) {
               </div>
               <div style={{display:'flex', gap:'12px'}}>
                 <button className={styles.deleteSpaceBtn} onClick={deleteSpace}>✕ Delete Space</button>
-                <button className={styles.addTaskBtn} onClick={openNewTaskModal}>+ Add Task</button>
               </div>
             </div>
 
@@ -261,6 +265,14 @@ export default function SpaceBoard({ uid }) {
                           </div>
                         )
                       })}
+                      
+                      {/* Add Task Button directly in column */}
+                      <button 
+                        onClick={() => openNewTaskModal(col.id)} 
+                        style={{background:'none', border:'1px dashed var(--border)', padding:'10px', borderRadius:'8px', color:'var(--text-soft)', cursor:'pointer', marginTop:'4px'}}
+                      >
+                        + Add Task
+                      </button>
                     </div>
                   </div>
                 )
@@ -337,6 +349,36 @@ export default function SpaceBoard({ uid }) {
                  <button className={styles.btnDel} onClick={deleteModalTask}>Delete Task</button>
                ) : <div/>}
                <button className={styles.btnSave} onClick={saveModal}>Save Task</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. New Space Custom Modal */}
+      {showNewSpaceModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowNewSpaceModal(false)}>
+          <div className={styles.modal} style={{maxWidth:'400px'}} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2>Create New Space</h2>
+              <button className={styles.closeBtn} onClick={() => setShowNewSpaceModal(false)}>✕</button>
+            </div>
+            
+            <div className={styles.modalBody}>
+              <div className={styles.field}>
+                <label>Space Name</label>
+                <input 
+                  className={styles.input} 
+                  autoFocus
+                  placeholder="e.g. Studying, Groceries..." 
+                  value={newSpaceName} 
+                  onChange={e => setNewSpaceName(e.target.value)} 
+                  onKeyDown={e => e.key === 'Enter' && saveNewSpace()}
+                />
+              </div>
+            </div>
+
+            <div className={styles.modalFooter} style={{justifyContent:'flex-end'}}>
+               <button className={styles.btnSave} onClick={saveNewSpace}>Create Space</button>
             </div>
           </div>
         </div>

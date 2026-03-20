@@ -309,10 +309,14 @@
   padding: 12px 14px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text-dark);
   font-family: inherit;
   font-size: 1rem;
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: #999;
 }
 
 .input:focus, .textarea:focus {

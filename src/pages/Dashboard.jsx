@@ -80,7 +80,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
   const [f1, setF1] = useState({ days:'--', hours:'--', mins:'--' })
   useEffect(() => {
     const tick = () => {
-      const race = new Date('2026-03-20T15:00:00+03:00'), diff = race - new Date()
+      const race = new Date('2026-03-29T10:30:00'), diff = race - new Date()
       if (diff > 0) setF1({ days: String(Math.floor(diff/86400000)).padStart(2,'0'), hours: String(Math.floor((diff%86400000)/3600000)).padStart(2,'0'), mins: String(Math.floor((diff%3600000)/60000)).padStart(2,'0') })
       else setF1({ days:'🏁', hours:'0', mins:'0' })
     }
@@ -220,7 +220,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
 
   /* main tabs */
   const [tab, setTab] = useState('overview')
-  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'spaces', label:'📋 Spaces' },{ key:'planner',  label:'📅 Day Planner' },{ key:'bookshelf',label:'📚 Book Shelf' },{ key:'ereader',  label:'📖 E-Reader' },{ key:'games',    label:'🎮 Games' }]
+  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'planner', label:'✅ To-Do List' },{ key:'bookshelf',label:'📚 Reading & Shelf' },{ key:'games',    label:'🎮 Games' }]
 
   /* ── Day Planner (Firebase) ── */
   const todayKey = useMemo(() => new Date().toISOString().split('T')[0], [])
@@ -663,106 +663,8 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
         </div>
       )}
 
-      {/* ═══ DAY PLANNER TAB ═══ */}
-      {tab==='planner' && (
-        <div className={styles.planner}>
-          <div className={styles.plannerTop}>
-            <div>
-              <div className={styles.cardLabel}>📅 Day Planner</div>
-              <h2 className={styles.plannerTitle}>Today's Plan</h2>
-            </div>
-            <div className={styles.syncStatus}>
-              <span className={`${styles.syncDot} ${synced?styles.syncDotOn:''}`} />
-              {synced ? 'Synced ✓' : 'Connecting...'}
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className={styles.plannerStats}>
-            {[{l:'🔴 High',v:plannerStats.high},{l:'🟡 Medium',v:plannerStats.medium},{l:'🟢 Low',v:plannerStats.low},{l:'✅ Done',v:plannerStats.done}].map(({l,v})=>(
-              <div key={l} className={styles.statChip}>{l} <strong>{v}</strong></div>
-            ))}
-          </div>
-
-          {/* Add Task */}
-          <div className={styles.addTaskRow}>
-            <input className={styles.plannerInput} value={taskText} onChange={e=>setTaskText(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addTask()} placeholder="Add a task for today..." />
-            <input className={styles.plannerTimeInput} type="time" value={taskTime} onChange={e=>setTaskTime(e.target.value)} />
-            <select className={styles.plannerSelect} value={taskSlot} onChange={e=>setTaskSlot(e.target.value)}>
-              <option value="morning">🌅 Morning</option>
-              <option value="afternoon">☀️ Afternoon</option>
-              <option value="evening">🌙 Evening</option>
-            </select>
-          </div>
-          <div className={styles.addTaskRow2}>
-            <select className={styles.plannerSelect} value={taskPriority} onChange={e=>setTaskPriority(e.target.value)}>
-              <option value="medium">🟡 Medium</option>
-              <option value="high">🔴 High</option>
-              <option value="low">🟢 Low</option>
-            </select>
-            <input className={styles.plannerTimeInput} type="date" value={taskDue} onChange={e=>setTaskDue(e.target.value)} />
-            <button className={styles.btnAmber} onClick={addTask} style={{marginLeft:'auto'}}>+ Add Task</button>
-          </div>
-
-          {/* Filters */}
-          <div className={styles.filters}>
-            {['all','high','medium','low','pending','done'].map(f=>(
-              <button key={f} className={`${styles.filterBtn} ${plannerFilter===f?styles.filterBtnActive:''}`} onClick={()=>setPlannerFilter(f)}>
-                {f==='all'?'All':f==='high'?'🔴 High':f==='medium'?'🟡 Medium':f==='low'?'🟢 Low':f==='pending'?'⏳ Pending':'✅ Done'}
-              </button>
-            ))}
-            <button className={styles.clearDoneBtn} onClick={clearDone}>🗑 Clear Done</button>
-          </div>
-
-          {/* Slots */}
-          <div className={styles.slots}>
-            {[{k:'morning',l:'🌅 Morning',c:styles.slotMorning},{k:'afternoon',l:'☀️ Afternoon',c:styles.slotAfternoon},{k:'evening',l:'🌙 Evening',c:styles.slotEvening}].map(({k,l,c})=>(
-              <div 
-                key={k} 
-                className={`${styles.slot} ${c}`} 
-                style={draggedPlannerSlot === k ? {boxShadow: '0 0 0 2px var(--amber) inset', background: 'rgba(232, 132, 58, 0.05)'} : {}}
-                onDragOver={(e) => handlePlannerDragOver(e, k)}
-                onDragLeave={() => setDraggedPlannerSlot(null)}
-                onDrop={(e) => handlePlannerDrop(e, k)}
-              >
-                <div className={styles.slotTitle}>{l}</div>
-                {tasksBySlot[k].length===0
-                  ? <div className={styles.emptySlot} style={{pointerEvents:'none'}}>No tasks yet</div>
-                  : tasksBySlot[k].map(t=>(
-                    <div 
-                      key={t.id} 
-                      className={styles.taskItem}
-                      draggable
-                      onDragStart={(e) => handlePlannerDragStart(e, t.id)}
-                      style={{cursor:'grab'}}
-                    >
-                      <div className={`${styles.taskCheck} ${t.done?styles.taskChecked:''}`} onClick={()=>toggleTask(t.id,t.done)} />
-                      <div className={styles.taskBody}>
-                        <div className={`${styles.taskText} ${t.done?styles.taskDone:''}`}>{t.text}</div>
-                        <div className={styles.taskMeta}>
-                          <span className={`${styles.prioBadge} ${PRIORITY_CLASS[t.priority]||styles.prioMed}`}>{PRIORITY_LABEL[t.priority]||'🟡 Medium'}</span>
-                          {t.time && <span className={styles.taskTime}>⏰ {t.time}</span>}
-                          {t.due && <span className={styles.taskDue}>{t.due < todayKey && !t.done ? `⚠️ ${t.due}` : `📅 ${t.due}`}</span>}
-                        </div>
-                      </div>
-                      <button className={styles.taskDel} onClick={()=>deleteTask(t.id)}>✕</button>
-                    </div>
-                  ))
-                }
-              </div>
-            ))}
-          </div>
-
-          {/* Progress */}
-          <div className={styles.progress}>
-            <div className={styles.progressLabel}><span>Daily Progress</span><span>{plannerStats.done} / {plannerStats.total} tasks done</span></div>
-            <div className={styles.progressTrack}><div className={styles.progressFill} style={{width:`${pct}%`}} /></div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ SPACES / KANBAN TAB ═══ */}
-      {tab==='spaces' && <SpaceBoard uid={uid} />}
+      {/* ═══ TO-DO LIST (JIRA BOARD) TAB ═══ */}
+      {tab==='planner' && <SpaceBoard uid={uid} />}
 
       {/* ═══ BOOK SHELF TAB ═══ */}
       {tab==='bookshelf' && (
@@ -796,11 +698,12 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
               <div className={styles.compactList}>{books.filter(b=>b.shelf==='done').sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,3).map(b=><BookCard key={b.id} book={b} compact />)}</div>
             </section>
           )}
+
+          <div style={{marginTop: '40px', borderTop: '1px solid var(--border)', paddingTop: '20px'}}>
+             <EpubLibrary />
+          </div>
         </div>
       )}
-
-      {/* ═══ E-READER TAB ═══ */}
-      {tab==='ereader' && <EpubLibrary />}
 
       {/* ═══ GAMES TAB ═══ */}
       {tab==='games' && (
