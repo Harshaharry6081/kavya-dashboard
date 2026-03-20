@@ -1,10 +1,14 @@
 import { ref, push, onValue, update, remove } from 'firebase/database'
-import { db } from './config'
+import { db, auth } from './config'
 
-const BOOKS_REF = 'books/shelf'
+const getBooksRef = () => {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error("Not authenticated");
+  return `users/${uid}/books/shelf`;
+}
 
 export function subscribeBooks(callback) {
-  const r = ref(db, BOOKS_REF)
+  const r = ref(db, getBooksRef())
   return onValue(r, snap => {
     const data = snap.val() || {}
     const books = Object.entries(data).map(([id, book]) => ({ id, ...book }))
@@ -13,16 +17,16 @@ export function subscribeBooks(callback) {
 }
 
 export function addBook(book) {
-  return push(ref(db, BOOKS_REF), {
+  return push(ref(db, getBooksRef()), {
     ...book,
     createdAt: Date.now()
   })
 }
 
 export function updateBook(id, updates) {
-  return update(ref(db, `${BOOKS_REF}/${id}`), updates)
+  return update(ref(db, `${getBooksRef()}/${id}`), updates)
 }
 
 export function deleteBook(id) {
-  return remove(ref(db, `${BOOKS_REF}/${id}`))
+  return remove(ref(db, `${getBooksRef()}/${id}`))
 }

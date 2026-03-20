@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ref, push, onValue, update, remove, set, get } from 'firebase/database'
-import { db } from '../firebase/config'
+import { db, auth } from '../firebase/config'
 import BookCard from '../components/BookCard'
 import EpubLibrary from './EpubLibrary'
 import styles from './Dashboard.module.css'
 
 /* ── Constants ────────────────────────────────────────── */
 const TIME_SLOTS = [
-  { range:[0,4],   greeting:'✦ Still up?',      title:"Kavya's <em>Night Owl</em> Dashboard",  sub:'Late nights have their own kind of magic. 🌙', coffeeLabel:'🌙 Night Mode', coffeeIcon:'🌙', coffeeStatus:'Sleep might be better.<br/>But here you are.', coffeeSub:'The night is yours. ✨', coffeeBg:'linear-gradient(135deg,#0f0c29 0%,#1a1a2e 100%)' },
-  { range:[4,6],   greeting:'✦ Early bird!',     title:"Kavya's <em>Dawn</em> Dashboard",        sub:'The world is quiet. This hour is yours. 🌄', coffeeLabel:'🌄 Dawn Mode', coffeeIcon:'🌄', coffeeStatus:'First light.<br/>First cup.', coffeeSub:'You beat the sun today. ☕', coffeeBg:'linear-gradient(135deg,#1a0a00 0%,#7c3f00 100%)' },
-  { range:[6,9],   greeting:'✦ Good morning',    title:"Kavya's <em>Morning</em> Dashboard",     sub:'Soft light, warm cup, slow start. ☀️', coffeeLabel:'☕ Morning Mode', coffeeIcon:'☕', coffeeStatus:"Today's Status:<br/>Required.", coffeeSub:'Because some mornings just need one. ☕', coffeeBg:'linear-gradient(135deg,#2c1810 0%,#4a2c1a 100%)' },
-  { range:[9,12],  greeting:'✦ Good morning',    title:"Kavya's <em>Vibe</em> Dashboard",        sub:"Morning in full swing. You've got this. 💪", coffeeLabel:'☕ Second Cup?', coffeeIcon:'☕', coffeeStatus:'Second cup<br/>unlocked.', coffeeSub:"No one's counting. Refill away. ☕", coffeeBg:'linear-gradient(135deg,#2c1810 0%,#4a2c1a 100%)' },
-  { range:[12,14], greeting:'✦ Good afternoon',  title:"Kavya's <em>Midday</em> Dashboard",      sub:'Lunchtime. Breathe. Take a small break. 🍱', coffeeLabel:'🍵 Lunch Break', coffeeIcon:'🍵', coffeeStatus:'Midday Check-in:<br/>Eat something.', coffeeSub:'Food first. Hustle after. 🌿', coffeeBg:'linear-gradient(135deg,#1a3a1a 0%,#2d5a2d 100%)' },
-  { range:[14,17], greeting:'✦ Good afternoon',  title:"Kavya's <em>Afternoon</em> Dashboard",   sub:'The golden window of focus. 🌤', coffeeLabel:'☕ Afternoon Fuel', coffeeIcon:'☕', coffeeStatus:'Afternoon slump?<br/>Coffee says no.', coffeeSub:'One last cup to carry you through. ☕', coffeeBg:'linear-gradient(135deg,#2c1810 0%,#5c3820 100%)' },
-  { range:[17,20], greeting:'✦ Good evening',    title:"Kavya's <em>Evening</em> Dashboard",     sub:'Golden hour. Slow down a little. 🌅', coffeeLabel:'🫖 Evening Wind-down', coffeeIcon:'🫖', coffeeStatus:'Evening Mode:<br/>Tea time.', coffeeSub:'Chamomile or chai — your call. 🌿', coffeeBg:'linear-gradient(135deg,#1a0a1a 0%,#3d1a2e 100%)' },
-  { range:[20,22], greeting:'✦ Good evening',    title:"Kavya's <em>Night</em> Dashboard",       sub:'Winding down. One chapter and then sleep. 📖', coffeeLabel:'📖 Night Mode', coffeeIcon:'🌙', coffeeStatus:'Reading time:<br/>One chapter.', coffeeSub:'Close the screen soon. Rest well. 🌿', coffeeBg:'linear-gradient(135deg,#0a0a1a 0%,#1a1a3d 100%)' },
-  { range:[22,24], greeting:'✦ Still up?',        title:"Kavya's <em>Late Night</em> Dashboard",  sub:'The quiet hours. Just you and your thoughts. 🌌', coffeeLabel:'🌌 Late Night Mode', coffeeIcon:'🌙', coffeeStatus:'Late night energy:<br/>Mysterious.', coffeeSub:'Tomorrow is a new canvas. 🌙', coffeeBg:'linear-gradient(135deg,#0a0010 0%,#1a0a2e 100%)' },
+  { range:[0,4],   greeting:'✦ Still up?',      title:"<em>Night Owl</em> Dashboard",  sub:'Late nights have their own kind of magic. 🌙', coffeeLabel:'🌙 Night Mode', coffeeIcon:'🌙', coffeeStatus:'Sleep might be better.<br/>But here you are.', coffeeSub:'The night is yours. ✨', coffeeBg:'linear-gradient(135deg,#0f0c29 0%,#1a1a2e 100%)' },
+  { range:[4,6],   greeting:'✦ Early bird!',     title:"<em>Dawn</em> Dashboard",        sub:'The world is quiet. This hour is yours. 🌄', coffeeLabel:'🌄 Dawn Mode', coffeeIcon:'🌄', coffeeStatus:'First light.<br/>First cup.', coffeeSub:'You beat the sun today. ☕', coffeeBg:'linear-gradient(135deg,#1a0a00 0%,#7c3f00 100%)' },
+  { range:[6,9],   greeting:'✦ Good morning',    title:"<em>Morning</em> Dashboard",     sub:'Soft light, warm cup, slow start. ☀️', coffeeLabel:'☕ Morning Mode', coffeeIcon:'☕', coffeeStatus:"Today's Status:<br/>Required.", coffeeSub:'Because some mornings just need one. ☕', coffeeBg:'linear-gradient(135deg,#2c1810 0%,#4a2c1a 100%)' },
+  { range:[9,12],  greeting:'✦ Good morning',    title:"<em>Vibe</em> Dashboard",        sub:"Morning in full swing. You've got this. 💪", coffeeLabel:'☕ Second Cup?', coffeeIcon:'☕', coffeeStatus:'Second cup<br/>unlocked.', coffeeSub:"No one's counting. Refill away. ☕", coffeeBg:'linear-gradient(135deg,#2c1810 0%,#4a2c1a 100%)' },
+  { range:[12,14], greeting:'✦ Good afternoon',  title:"<em>Midday</em> Dashboard",      sub:'Lunchtime. Breathe. Take a small break. 🍱', coffeeLabel:'🍵 Lunch Break', coffeeIcon:'🍵', coffeeStatus:'Midday Check-in:<br/>Eat something.', coffeeSub:'Food first. Hustle after. 🌿', coffeeBg:'linear-gradient(135deg,#1a3a1a 0%,#2d5a2d 100%)' },
+  { range:[14,17], greeting:'✦ Good afternoon',  title:"<em>Afternoon</em> Dashboard",   sub:'The golden window of focus. 🌤', coffeeLabel:'☕ Afternoon Fuel', coffeeIcon:'☕', coffeeStatus:'Afternoon slump?<br/>Coffee says no.', coffeeSub:'One last cup to carry you through. ☕', coffeeBg:'linear-gradient(135deg,#2c1810 0%,#5c3820 100%)' },
+  { range:[17,20], greeting:'✦ Good evening',    title:"<em>Evening</em> Dashboard",     sub:'Golden hour. Slow down a little. 🌅', coffeeLabel:'🫖 Evening Wind-down', coffeeIcon:'🫖', coffeeStatus:'Evening Mode:<br/>Tea time.', coffeeSub:'Chamomile or chai — your call. 🌿', coffeeBg:'linear-gradient(135deg,#1a0a1a 0%,#3d1a2e 100%)' },
+  { range:[20,22], greeting:'✦ Good evening',    title:"<em>Night</em> Dashboard",       sub:'Winding down. One chapter and then sleep. 📖', coffeeLabel:'📖 Night Mode', coffeeIcon:'🌙', coffeeStatus:'Reading time:<br/>One chapter.', coffeeSub:'Close the screen soon. Rest well. 🌿', coffeeBg:'linear-gradient(135deg,#0a0a1a 0%,#1a1a3d 100%)' },
+  { range:[22,24], greeting:'✦ Still up?',        title:"<em>Late Night</em> Dashboard",  sub:'The quiet hours. Just you and your thoughts. 🌌', coffeeLabel:'🌌 Late Night Mode', coffeeIcon:'🌙', coffeeStatus:'Late night energy:<br/>Mysterious.', coffeeSub:'Tomorrow is a new canvas. 🌙', coffeeBg:'linear-gradient(135deg,#0a0010 0%,#1a0a2e 100%)' },
 ]
 
 const MOODS = ['Chill day 🌿','Coffee + Deep Focus ☕','Take it slow today 🌤','Cozy reading mode 📖','Quiet & Productive 🤍','Low effort, high vibes ✨','Music on, world off 🎧','Good things are coming 🌸','Do one thing well today 🎯','Grateful and grounded 🍃','Let the day unfold 🌅','Soft day, warm heart ☀️']
@@ -68,7 +68,8 @@ function getTimeSlot(h) { return TIME_SLOTS.find(s => h >= s.range[0] && h < s.r
 function checkTTTWin(b) { for(const [a,c,d] of TTT_WINS) if(b[a]&&b[a]===b[c]&&b[c]===b[d]) return b[a]; return null }
 
 /* ── Component ────────────────────────────────────────── */
-export default function Dashboard({ books = [], dark, onToggleTheme }) {
+export default function Dashboard({ books = [], dark, onToggleTheme, userName = 'Kavya' }) {
+  const uid = auth.currentUser?.uid || 'defaultUser'
   /* time */
   const [now, setNow] = useState(new Date())
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 60000); return () => clearInterval(t) }, [])
@@ -132,7 +133,8 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
   const [newPlaylistName, setNewPlaylistName] = useState('')
 
   useEffect(() => {
-    const unsubLast = onValue(ref(db, 'music/lastPlayed'), snap => {
+    if (!uid) return
+    const unsubLast = onValue(ref(db, `users/${uid}/music/lastPlayed`), snap => {
       const data = snap.val()
       if (data) {
         setLastPlayed(data)
@@ -141,7 +143,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
         }
       }
     })
-    const unsubLists = onValue(ref(db, 'music/playlists'), snap => {
+    const unsubLists = onValue(ref(db, `users/${uid}/music/playlists`), snap => {
       const data = snap.val()
       if (data) {
         const arr = Object.values(data).sort((a,b) => a.addedAt - b.addedAt)
@@ -149,14 +151,14 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
         setCurrentPlaylistId(prev => prev ? prev : (arr.length > 0 ? arr[0].id : null))
       } else {
         /* Default fallback playlist if DB is empty */
-        const def = { id: 'default', name: "Kavya's Defaults", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1", addedAt: Date.now() }
+        const def = { id: 'default', name: `${userName}'s Defaults`, url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1", addedAt: Date.now() }
         setPlaylists([def])
         setCurrentPlaylistId(prev => prev ? prev : 'default')
-        set(ref(db, `music/playlists/default`), def)
+        set(ref(db, `users/${uid}/music/playlists/default`), def)
       }
     })
     return () => { unsubLast(); unsubLists() }
-  }, [])
+  }, [uid, userName])
 
   const parseSpotifyUrl = (url) => {
     try {
@@ -175,7 +177,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
     if (!embedUrl) { alert('Please enter a valid Spotify Playlist link.'); return }
     
     const id = `pl_${Date.now()}`
-    set(ref(db, `music/playlists/${id}`), { id, name: newPlaylistName.trim(), url: embedUrl, addedAt: Date.now() })
+    set(ref(db, `users/${uid}/music/playlists/${id}`), { id, name: newPlaylistName.trim(), url: embedUrl, addedAt: Date.now() })
     setCurrentPlaylistId(id)
     setAddingPlaylist(false)
     setNewPlaylistUrl('')
@@ -184,7 +186,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
   
   const deletePlaylist = (id) => {
     if(!confirm('Are you sure you want to delete this playlist?')) return
-    remove(ref(db, `music/playlists/${id}`))
+    remove(ref(db, `users/${uid}/music/playlists/${id}`))
     if (currentPlaylistId === id) {
       const left = playlists.filter(p => p.id !== id)
       setCurrentPlaylistId(left.length > 0 ? left[0].id : null)
@@ -196,18 +198,22 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
     setMusicPlaying(true)
     const now2 = new Date()
     const p = playlists.find(x => x.id === currentPlaylistId) || playlists[0]
-    set(ref(db, 'music/lastPlayed'), { playlistId: p?.id || null, playlistName: p?.name || "Unknown", playedAt: now2.toISOString(), playedAtLabel: now2.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}) })
+    set(ref(db, `users/${uid}/music/lastPlayed`), { playlistId: p?.id || null, playlistName: p?.name || "Unknown", playedAt: now2.toISOString(), playedAtLabel: now2.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}) })
   }
 
   /* note */
   const [note, setNote] = useState(null)
   const [noteEditing, setNoteEditing] = useState(false)
   const [noteText, setNoteText] = useState('')
-  useEffect(() => { const unsub = onValue(ref(db,'note/latest'), s=>setNote(s.val())); return ()=>unsub() }, [])
+  useEffect(() => {
+    if (!uid) return
+    const unsub = onValue(ref(db, `users/${uid}/note/latest`), s=>setNote(s.val()));
+    return ()=>unsub() 
+  }, [uid])
   const saveNote = () => {
     if (!noteText.trim()) return
     const t = new Date().toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})
-    set(ref(db,'note/latest'), { text:noteText.trim(), from:'Someone who cares 💛', time:t })
+    set(ref(db, `users/${uid}/note/latest`), { text:noteText.trim(), from:'Someone who cares 💛', time:t })
     setNoteText(''); setNoteEditing(false)
   }
 
@@ -217,7 +223,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
 
   /* ── Day Planner (Firebase) ── */
   const todayKey = useMemo(() => new Date().toISOString().split('T')[0], [])
-  const tasksRef = ref(db, `planner/${todayKey}`)
+  const tasksRef = ref(db, `users/${uid}/planner/${todayKey}`)
   const [tasks, setTasks] = useState({})
   const [taskText, setTaskText] = useState('')
   const [taskTime, setTaskTime] = useState('')
@@ -263,9 +269,9 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
     push(tasksRef, { text:taskText.trim(), time:taskTime, slot:taskSlot, priority:taskPriority, due:taskDue, done:false, created:Date.now() })
     setTaskText(''); setTaskTime(''); setTaskDue('')
   }
-  const toggleTask = (id, done) => update(ref(db,`planner/${todayKey}/${id}`), {done:!done})
-  const deleteTask = (id) => remove(ref(db,`planner/${todayKey}/${id}`))
-  const clearDone = () => { Object.entries(tasks).filter(([,t])=>t.done).forEach(([id])=>remove(ref(db,`planner/${todayKey}/${id}`))) }
+  const toggleTask = (id, done) => update(ref(db,`users/${uid}/planner/${todayKey}/${id}`), {done:!done})
+  const deleteTask = (id) => remove(ref(db,`users/${uid}/planner/${todayKey}/${id}`))
+  const clearDone = () => { Object.entries(tasks).filter(([,t])=>t.done).forEach(([id])=>remove(ref(db,`users/${uid}/planner/${todayKey}/${id}`))) }
 
   /* ── Games ── */
   const [roomId, setRoomId] = useState('')
@@ -470,7 +476,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.greetTag}>{slot.greeting}</div>
-        <h1 className={styles.greetTitle} dangerouslySetInnerHTML={{ __html: slot.title }} />
+        <h1 className={styles.greetTitle}>{userName}'s <span dangerouslySetInnerHTML={{ __html: slot.title }} /></h1>
         <p className={styles.greetSub}>{slot.sub}</p>
         <div className={styles.dateLine}>
           <span>{now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
@@ -627,7 +633,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
             {!easterRevealed && <div className={styles.easterHint}>✦ &nbsp; There might be a hidden message somewhere around here &nbsp; ✦</div>}
             {easterRevealed && (
               <div className={styles.easterReveal}>
-                <div className={styles.easterBig}>Hello, Kavya 👋</div>
+                <div className={styles.easterBig}>Hello, {userName} 👋</div>
                 <div className={styles.easterMsg}>This dashboard was built with good intentions and a little curiosity.<br/>Hope your day is as calm as a slow morning with a warm cup. ☕</div>
               </div>
             )}
