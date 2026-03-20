@@ -714,7 +714,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
 
           {/* Room Setup */}
           <div className={styles.roomSetup}>
-            <input className={styles.roomInput} value={roomId} onChange={e=>setRoomId(e.target.value)} placeholder="Room name (e.g. kavya123)" maxLength={20} />
+            <input className={styles.roomInput} value={roomId} onChange={e=>setRoomId(e.target.value)} placeholder={`Room name (e.g. ${userName.toLowerCase()}123)`} maxLength={20} />
             <input className={styles.roomInput} value={playerName} onChange={e=>setPlayerName(e.target.value)} placeholder="Your name" maxLength={12} style={{maxWidth:140}} />
             <button className={styles.btnAmber} onClick={joinRoom}>Join Room</button>
             <div className={`${styles.roomStatus} ${inRoom?styles.roomStatusOnline:''}`}>{roomStatus}</div>
