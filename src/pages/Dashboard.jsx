@@ -136,7 +136,9 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
       const data = snap.val()
       if (data) {
         setLastPlayed(data)
-        if (data.playlistId) setCurrentPlaylistId(data.playlistId)
+        if (data.playlistId) {
+          setCurrentPlaylistId(prev => prev ? prev : data.playlistId)
+        }
       }
     })
     const unsubLists = onValue(ref(db, 'music/playlists'), snap => {
@@ -144,19 +146,17 @@ export default function Dashboard({ books = [], dark, onToggleTheme }) {
       if (data) {
         const arr = Object.values(data).sort((a,b) => a.addedAt - b.addedAt)
         setPlaylists(arr)
-        if (arr.length > 0 && !currentPlaylistId) {
-          setCurrentPlaylistId(arr[0].id)
-        }
+        setCurrentPlaylistId(prev => prev ? prev : (arr.length > 0 ? arr[0].id : null))
       } else {
         /* Default fallback playlist if DB is empty */
         const def = { id: 'default', name: "Kavya's Defaults", url: "https://open.spotify.com/embed/playlist/37i9dQZF1DX5q67ZpWyRrZ?utm_source=generator&theme=0&autoplay=1", addedAt: Date.now() }
         setPlaylists([def])
-        setCurrentPlaylistId('default')
+        setCurrentPlaylistId(prev => prev ? prev : 'default')
         set(ref(db, `music/playlists/default`), def)
       }
     })
     return () => { unsubLast(); unsubLists() }
-  }, [currentPlaylistId])
+  }, [])
 
   const parseSpotifyUrl = (url) => {
     try {
