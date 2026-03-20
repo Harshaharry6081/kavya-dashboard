@@ -1,0 +1,425 @@
+.container {
+  display: flex;
+  height: calc(100vh - 80px); /* minus header/tabs approx */
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+}
+
+.sidebarHeader {
+  padding: 0 20px 16px;
+  font-family: "DM Serif Display", serif;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addSpaceBtn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.addSpaceBtn:hover {
+  background: rgba(232, 132, 58, 0.1);
+}
+
+.spacesList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spaceItem {
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.spaceItem:hover {
+  background: var(--border);
+}
+
+.spaceActive {
+  background: var(--amber);
+  color: #fff;
+  font-weight: 500;
+}
+
+.spaceActive:hover {
+  background: var(--amber);
+}
+
+.emptySpaces {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+/* Main Board */
+.boardArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.boardHeader {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.boardTitle {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deleteSpaceBtn {
+  background: none;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.deleteSpaceBtn:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.addTaskBtn {
+  background: var(--amber);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(232, 132, 58, 0.2);
+}
+
+.boardCols {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+.column {
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.columnDragOver {
+  border-color: var(--amber);
+  background: rgba(232, 132, 58, 0.03);
+}
+
+.colHeader {
+  padding: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.colCount {
+  background: var(--border);
+  color: var(--text-soft);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.taskList {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.taskCard {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: grab;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.1s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.taskCard:hover {
+  border-color: var(--amber);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.taskCard:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.taskTitle {
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.taskMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  margin-top: 12px;
+}
+
+.taskChecks {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--bg);
+  width: 90%;
+  max-width: 500px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  border: 1px solid var(--border);
+}
+
+.modalHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalHeader h2 {
+  font-family: inherit;
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-soft);
+}
+
+.modalBody {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--amber);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Checklists */
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.checkBox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.checkBoxDone {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.checkText {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.checkTextDone {
+  text-decoration: line-through;
+  color: var(--text-soft);
+}
+
+.delCheckBtn {
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.delCheckBtn:hover {
+  color: #ef4444;
+}
+
+.addCheckRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.addCheckBtn {
+  background: var(--border);
+  border: none;
+  color: var(--text-dark);
+  padding: 0 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.addCheckBtn:hover {
+  background: var(--amber);
+  color: white;
+}
+
+.modalFooter {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnDel {
+  background: none;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btnSave {
+  background: var(--amber);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}

@@ -132,7 +132,8 @@ export default function App() {
     )
   }
 
-  const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Kavya'
+  const rawName = user.displayName ? user.displayName.split(' ')[0] : 'Kavya'
+  const firstName = rawName.charAt(0).toUpperCase() + rawName.slice(1)
 
   return (
     <>

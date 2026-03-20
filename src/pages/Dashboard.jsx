@@ -4,6 +4,7 @@ import { ref, push, onValue, update, remove, set, get } from 'firebase/database'
 import { db, auth } from '../firebase/config'
 import BookCard from '../components/BookCard'
 import EpubLibrary from './EpubLibrary'
+import SpaceBoard from '../components/SpaceBoard'
 import styles from './Dashboard.module.css'
 
 /* ── Constants ────────────────────────────────────────── */
@@ -219,7 +220,7 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
 
   /* main tabs */
   const [tab, setTab] = useState('overview')
-  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'planner',  label:'📅 Day Planner' },{ key:'bookshelf',label:'📚 Book Shelf' },{ key:'ereader',  label:'📖 E-Reader' },{ key:'games',    label:'🎮 Games' }]
+  const MAIN_TABS = [{ key:'overview',  label:'🏠 Overview' },{ key:'spaces', label:'📋 Spaces' },{ key:'planner',  label:'📅 Day Planner' },{ key:'bookshelf',label:'📚 Book Shelf' },{ key:'ereader',  label:'📖 E-Reader' },{ key:'games',    label:'🎮 Games' }]
 
   /* ── Day Planner (Firebase) ── */
   const todayKey = useMemo(() => new Date().toISOString().split('T')[0], [])
@@ -230,6 +231,8 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
   const [taskSlot, setTaskSlot] = useState('morning')
   const [taskPriority, setTaskPriority] = useState('medium')
   const [taskDue, setTaskDue] = useState('')
+  
+  const [draggedPlannerSlot, setDraggedPlannerSlot] = useState(null)
   const [plannerFilter, setPlannerFilter] = useState('all')
   const [synced, setSynced] = useState(false)
 
@@ -271,8 +274,27 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
   }
   const toggleTask = (id, done) => update(ref(db,`users/${uid}/planner/${todayKey}/${id}`), {done:!done})
   const deleteTask = (id) => remove(ref(db,`users/${uid}/planner/${todayKey}/${id}`))
-  const clearDone = () => { Object.entries(tasks).filter(([,t])=>t.done).forEach(([id])=>remove(ref(db,`users/${uid}/planner/${todayKey}/${id}`))) }
+  const clearDone = () => {
+    Object.keys(tasks).forEach(k => {
+      if(tasks[k].done) remove(ref(db, `users/${uid}/planner/${todayKey}/${k}`))
+    })
+  }
 
+  // --- Day Planner Drag & Drop ---
+  const handlePlannerDragStart = (e, taskId) => {
+    e.dataTransfer.setData('plannerTaskId', taskId)
+  }
+  const handlePlannerDragOver = (e, slotKey) => {
+    e.preventDefault()
+    setDraggedPlannerSlot(slotKey)
+  }
+  const handlePlannerDrop = async (e, slotKey) => {
+    e.preventDefault()
+    setDraggedPlannerSlot(null)
+    const taskId = e.dataTransfer.getData('plannerTaskId')
+    if(!taskId) return
+    await update(ref(db, `users/${uid}/planner/${todayKey}/${taskId}`), { slot: slotKey })
+  }
   /* ── Games ── */
   const [roomId, setRoomId] = useState('')
   const [playerName, setPlayerName] = useState('')
@@ -695,12 +717,25 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
           {/* Slots */}
           <div className={styles.slots}>
             {[{k:'morning',l:'🌅 Morning',c:styles.slotMorning},{k:'afternoon',l:'☀️ Afternoon',c:styles.slotAfternoon},{k:'evening',l:'🌙 Evening',c:styles.slotEvening}].map(({k,l,c})=>(
-              <div key={k} className={`${styles.slot} ${c}`}>
+              <div 
+                key={k} 
+                className={`${styles.slot} ${c}`} 
+                style={draggedPlannerSlot === k ? {boxShadow: '0 0 0 2px var(--amber) inset', background: 'rgba(232, 132, 58, 0.05)'} : {}}
+                onDragOver={(e) => handlePlannerDragOver(e, k)}
+                onDragLeave={() => setDraggedPlannerSlot(null)}
+                onDrop={(e) => handlePlannerDrop(e, k)}
+              >
                 <div className={styles.slotTitle}>{l}</div>
                 {tasksBySlot[k].length===0
-                  ? <div className={styles.emptySlot}>No tasks yet</div>
+                  ? <div className={styles.emptySlot} style={{pointerEvents:'none'}}>No tasks yet</div>
                   : tasksBySlot[k].map(t=>(
-                    <div key={t.id} className={styles.taskItem}>
+                    <div 
+                      key={t.id} 
+                      className={styles.taskItem}
+                      draggable
+                      onDragStart={(e) => handlePlannerDragStart(e, t.id)}
+                      style={{cursor:'grab'}}
+                    >
                       <div className={`${styles.taskCheck} ${t.done?styles.taskChecked:''}`} onClick={()=>toggleTask(t.id,t.done)} />
                       <div className={styles.taskBody}>
                         <div className={`${styles.taskText} ${t.done?styles.taskDone:''}`}>{t.text}</div>
@@ -725,6 +760,9 @@ export default function Dashboard({ books = [], dark, onToggleTheme, userName = 
           </div>
         </div>
       )}
+
+      {/* ═══ SPACES / KANBAN TAB ═══ */}
+      {tab==='spaces' && <SpaceBoard uid={uid} />}
 
       {/* ═══ BOOK SHELF TAB ═══ */}
       {tab==='bookshelf' && (
